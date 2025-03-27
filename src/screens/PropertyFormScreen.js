@@ -92,7 +92,7 @@ const PropertyFormScreen = ({ navigation }) => {
   const handleSubmit = () => {
     if (!validateForm()) return;
     
-    navigation.navigate('PropertySummary', {
+    navigation.navigate('Success', {
       property,
       mediaFiles,
     });

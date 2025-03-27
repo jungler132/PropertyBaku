@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from '../screens/LoginScreen';
 import PropertyFormScreen from '../screens/PropertyFormScreen';
 import PropertySummaryScreen from '../screens/PropertySummaryScreen';
+import SuccessScreen from '../screens/SuccessScreen';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const Stack = createStackNavigator();
@@ -43,6 +44,13 @@ const AppNavigator = () => {
           component={PropertyFormScreen}
           options={{
             title: 'Əmlak əlavə et',
+          }}
+        />
+        <Stack.Screen
+          name="Success"
+          component={SuccessScreen}
+          options={{
+            headerShown: false,
           }}
         />
         <Stack.Screen
