@@ -140,14 +140,14 @@ const PropertyFormScreen = ({ navigation }) => {
   const renderFeatureSwitch = (icon, label, value, field) => (
     <View style={styles.switchContainer}>
       <View style={styles.switchLabelContainer}>
-        <FontAwesome5 name={icon} size={24} color="#4CAF50" style={styles.switchIcon} />
+        <FontAwesome5 name={icon} size={24} color="#363237" style={styles.switchIcon} />
         <Text style={styles.switchLabel}>{label}</Text>
       </View>
       <Switch
         value={value}
         onValueChange={(newValue) => setProperty({ ...property, [field]: newValue })}
-        trackColor={{ false: '#767577', true: '#81b0ff' }}
-        thumbColor={value ? '#4CAF50' : '#f4f3f4'}
+        trackColor={{ false: '#73605B', true: '#D09683' }}
+        thumbColor={value ? '#363237' : '#F9F9FF'}
       />
     </View>
   );
@@ -155,12 +155,12 @@ const PropertyFormScreen = ({ navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <LinearGradient
-        colors={['#4CAF50', '#2196F3']}
+        colors={['#363237', '#2D4262']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.header}
       >
-        <MaterialIcons name="add-home" size={40} color="white" />
+        <MaterialIcons name="add-home" size={40} color="#F9F9FF" />
         <Text style={styles.title}>{i18n.t('propertyForm.addProperty')}</Text>
       </LinearGradient>
 
@@ -168,13 +168,13 @@ const PropertyFormScreen = ({ navigation }) => {
         <Text style={styles.sectionTitle}>{i18n.t('propertyForm.ownerInfo')} *</Text>
         
         <View style={styles.inputContainer}>
-          <MaterialIcons name="person" size={24} color="#4CAF50" style={styles.icon} />
+          <MaterialIcons name="person" size={24} color="#363237" style={styles.icon} />
           <TextInput
             style={styles.input}
             placeholder={i18n.t('propertyForm.owner') + ' *'}
             value={property.owner}
             onChangeText={(text) => setProperty({ ...property, owner: text })}
-            placeholderTextColor="#666"
+            placeholderTextColor="#73605B"
           />
         </View>
 
@@ -183,16 +183,16 @@ const PropertyFormScreen = ({ navigation }) => {
             style={styles.phoneCodeButton}
             onPress={() => setShowCountryPicker(true)}
           >
-            <Text style={styles.phoneCodeText}>{property.phoneCode}</Text>
-            <MaterialIcons name="arrow-drop-down" size={24} color="#4CAF50" />
+            <Text style={[styles.phoneCodeText, { color: '#363237' }]}>{property.phoneCode}</Text>
+            <MaterialIcons name="arrow-drop-down" size={24} color="#363237" />
           </TouchableOpacity>
           <TextInput
-            style={styles.phoneInput}
+            style={[styles.phoneInput, { color: '#363237' }]}
             placeholder={i18n.t('propertyForm.phoneNumber') + ' *'}
             value={property.phoneNumber}
             onChangeText={(text) => setProperty({ ...property, phoneNumber: text })}
             keyboardType="phone-pad"
-            placeholderTextColor="#666"
+            placeholderTextColor="#73605B"
             maxLength={10}
           />
         </View>
@@ -200,74 +200,74 @@ const PropertyFormScreen = ({ navigation }) => {
         <Text style={styles.sectionTitle}>{i18n.t('propertyForm.mainInfo')} *</Text>
         
         <View style={styles.inputContainer}>
-          <MaterialIcons name="house" size={24} color="#4CAF50" style={styles.icon} />
+          <MaterialIcons name="house" size={24} color="#363237" style={styles.icon} />
           <TextInput
             style={styles.input}
             placeholder={i18n.t('propertyForm.propertyType') + ' *'}
             value={property.type}
             onChangeText={(text) => setProperty({ ...property, type: text })}
-            placeholderTextColor="#666"
+            placeholderTextColor="#73605B"
           />
         </View>
 
         <View style={styles.inputContainer}>
-          <MaterialIcons name="square-foot" size={24} color="#4CAF50" style={styles.icon} />
+          <MaterialIcons name="square-foot" size={24} color="#363237" style={styles.icon} />
           <TextInput
             style={styles.input}
             placeholder={i18n.t('propertyForm.area') + ' *'}
             value={property.area}
             onChangeText={(text) => setProperty({ ...property, area: text })}
             keyboardType="numeric"
-            placeholderTextColor="#666"
+            placeholderTextColor="#73605B"
           />
         </View>
 
         <View style={styles.inputContainer}>
-          <MaterialIcons name="landscape" size={24} color="#4CAF50" style={styles.icon} />
+          <MaterialIcons name="landscape" size={24} color="#363237" style={styles.icon} />
           <TextInput
             style={styles.input}
             placeholder={i18n.t('propertyForm.landArea') + ' *'}
             value={property.landArea}
             onChangeText={(text) => setProperty({ ...property, landArea: text })}
             keyboardType="numeric"
-            placeholderTextColor="#666"
+            placeholderTextColor="#73605B"
           />
         </View>
 
         <View style={styles.inputContainer}>
-          <MaterialIcons name="bed" size={24} color="#4CAF50" style={styles.icon} />
+          <MaterialIcons name="bed" size={24} color="#363237" style={styles.icon} />
           <TextInput
             style={styles.input}
             placeholder={i18n.t('propertyForm.bedrooms') + ' *'}
             value={property.bedrooms}
             onChangeText={(text) => setProperty({ ...property, bedrooms: text })}
             keyboardType="numeric"
-            placeholderTextColor="#666"
+            placeholderTextColor="#73605B"
           />
         </View>
 
         <View style={styles.inputContainer}>
-          <MaterialIcons name="bathroom" size={24} color="#4CAF50" style={styles.icon} />
+          <MaterialIcons name="bathroom" size={24} color="#363237" style={styles.icon} />
           <TextInput
             style={styles.input}
             placeholder={i18n.t('propertyForm.bathrooms') + ' *'}
             value={property.bathrooms}
             onChangeText={(text) => setProperty({ ...property, bathrooms: text })}
             keyboardType="numeric"
-            placeholderTextColor="#666"
+            placeholderTextColor="#73605B"
           />
         </View>
 
         <View style={[styles.switchContainer, styles.requiredSwitch]}>
           <View style={styles.switchLabelContainer}>
-            <MaterialIcons name="garage" size={24} color="#4CAF50" style={styles.switchIcon} />
+            <MaterialIcons name="garage" size={24} color="#363237" style={styles.switchIcon} />
             <Text style={styles.switchLabel}>{i18n.t('propertyForm.garage')} *</Text>
           </View>
           <Switch
             value={property.hasGarage}
             onValueChange={(value) => setProperty({ ...property, hasGarage: value })}
-            trackColor={{ false: '#767577', true: '#81b0ff' }}
-            thumbColor={property.hasGarage ? '#4CAF50' : '#f4f3f4'}
+            trackColor={{ false: '#73605B', true: '#D09683' }}
+            thumbColor={property.hasGarage ? '#363237' : '#F9F9FF'}
           />
         </View>
 
@@ -293,24 +293,24 @@ const PropertyFormScreen = ({ navigation }) => {
           <View style={styles.mediaButtons}>
             <TouchableOpacity style={styles.mediaButton} onPress={pickImage}>
               <LinearGradient
-                colors={['#4CAF50', '#2196F3']}
+                colors={['#363237', '#2D4262']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.mediaButtonGradient}
               >
-                <MaterialIcons name="photo-camera" size={24} color="white" />
+                <MaterialIcons name="photo-camera" size={24} color="#F9F9FF" />
                 <Text style={styles.mediaButtonText}>{i18n.t('propertyForm.photo')} *</Text>
               </LinearGradient>
             </TouchableOpacity>
             
             <TouchableOpacity style={styles.mediaButton} onPress={pickVideo}>
               <LinearGradient
-                colors={['#4CAF50', '#2196F3']}
+                colors={['#363237', '#2D4262']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.mediaButtonGradient}
               >
-                <MaterialIcons name="videocam" size={24} color="white" />
+                <MaterialIcons name="videocam" size={24} color="#F9F9FF" />
                 <Text style={styles.mediaButtonText}>{i18n.t('propertyForm.video')}</Text>
               </LinearGradient>
             </TouchableOpacity>
@@ -344,12 +344,12 @@ const PropertyFormScreen = ({ navigation }) => {
 
         <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
           <LinearGradient
-            colors={['#4CAF50', '#2196F3']}
+            colors={['#363237', '#2D4262']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.submitButtonGradient}
           >
-            <MaterialIcons name="save" size={24} color="white" style={styles.submitButtonIcon} />
+            <MaterialIcons name="save" size={24} color="#F9F9FF" style={styles.submitButtonIcon} />
             <Text style={styles.submitButtonText}>{i18n.t('propertyForm.save')}</Text>
           </LinearGradient>
         </TouchableOpacity>
@@ -396,7 +396,7 @@ const mediaItemSize = (width - 60) / 2;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#F9F9FF',
   },
   header: {
     padding: 20,
@@ -408,7 +408,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'white',
+    color: '#F9F9FF',
     marginTop: 10,
     fontFamily: 'Nunito_700Bold',
   },
@@ -418,7 +418,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#363237',
     marginBottom: 15,
     marginTop: 20,
     fontFamily: 'Nunito_700Bold',
@@ -426,45 +426,34 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'white',
-    borderRadius: 15,
+    backgroundColor: '#F9F9FF',
+    borderRadius: 12,
     marginBottom: 15,
-    paddingHorizontal: 15,
-    height: 60,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+    borderWidth: 1,
+    borderColor: '#73605B',
   },
   icon: {
-    marginRight: 10,
+    padding: 10,
   },
   input: {
     flex: 1,
+    paddingVertical: 12,
+    paddingRight: 10,
     fontSize: 16,
-    color: '#333',
+    color: '#363237',
     fontFamily: 'Nunito_400Regular',
   },
   switchContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: 'white',
-    padding: 15,
-    borderRadius: 15,
+    justifyContent: 'space-between',
     marginBottom: 15,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    backgroundColor: '#F9F9FF',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#73605B',
   },
   requiredSwitch: {
     borderWidth: 1,
@@ -476,10 +465,11 @@ const styles = StyleSheet.create({
   },
   switchIcon: {
     marginRight: 10,
+    color: '#363237',
   },
   switchLabel: {
     fontSize: 16,
-    color: '#333',
+    color: '#363237',
     fontFamily: 'Nunito_400Regular',
   },
   mediaSection: {
@@ -487,7 +477,7 @@ const styles = StyleSheet.create({
   },
   mediaNote: {
     fontSize: 14,
-    color: '#666',
+    color: '#73605B',
     marginBottom: 15,
     fontStyle: 'italic',
     fontFamily: 'Nunito_400Regular',

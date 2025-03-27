@@ -1,33 +1,70 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, Dimensions } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+} from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useProperty } from '../context/PropertyContext';
 import i18n from '../translations/i18n';
-import { useLanguage } from '../translations/i18n';
 
 const { width } = Dimensions.get('window');
-const ITEM_WIDTH = (width - 60) / 2;
+const CARD_WIDTH = width * 0.9;
 
 const PropertyListScreen = ({ navigation }) => {
   const { properties } = useProperty();
-  const { currentLocale } = useLanguage();
 
-  const renderPropertyItem = ({ item }) => (
+  const renderPropertyCard = ({ item }) => (
     <TouchableOpacity
-      style={styles.propertyCard}
+      style={styles.card}
       onPress={() => navigation.navigate('PropertyDetails', { property: item })}
+      activeOpacity={0.95}
     >
-      <Image 
-        source={{ uri: item.mediaFiles?.[0]?.uri || 'https://picsum.photos/800/600' }} 
-        style={styles.propertyImage} 
+      <Image
+        source={{ uri: item.images[0] }}
+        style={styles.cardImage}
+        resizeMode="cover"
       />
       <LinearGradient
-        colors={['transparent', 'rgba(0,0,0,0.7)']}
-        style={styles.gradient}
+        colors={['transparent', 'rgba(54, 50, 55, 0.9)']}
+        style={styles.cardOverlay}
       >
-        <Text style={styles.propertyType}>{i18n.t(`propertyTypes.${item.type}`)}</Text>
-        <Text style={styles.propertyArea}>{item.area} {i18n.t('common.squareMeters')}</Text>
+        <View style={styles.cardContent}>
+          <View style={styles.cardHeader}>
+            <Text style={styles.propertyType}>
+              {i18n.t(`propertyTypes.${item.type}`)}
+            </Text>
+            <View style={styles.priceContainer}>
+              <MaterialIcons name="attach-money" size={18} color="#F9F9FF" />
+              <Text style={styles.price}>{item.price}</Text>
+            </View>
+          </View>
+
+          <View style={styles.cardDetails}>
+            <View style={styles.detailItem}>
+              <MaterialIcons name="king-bed" size={20} color="#D09683" />
+              <Text style={styles.detailText}>{item.bedrooms}</Text>
+            </View>
+            <View style={styles.detailItem}>
+              <MaterialIcons name="bathtub" size={20} color="#D09683" />
+              <Text style={styles.detailText}>{item.bathrooms}</Text>
+            </View>
+            <View style={styles.detailItem}>
+              <MaterialIcons name="square-foot" size={20} color="#D09683" />
+              <Text style={styles.detailText}>{item.area} m²</Text>
+            </View>
+          </View>
+
+          <View style={styles.locationContainer}>
+            <MaterialIcons name="location-on" size={16} color="#D09683" />
+            <Text style={styles.location}>{item.location}</Text>
+          </View>
+        </View>
       </LinearGradient>
     </TouchableOpacity>
   );
@@ -35,27 +72,28 @@ const PropertyListScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#4CAF50', '#2196F3']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
+        colors={['#363237', '#2D4262']}
         style={styles.header}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
       >
-        <Text style={styles.headerTitle}>{i18n.t('home.myProperties')}</Text>
+        <Text style={styles.title}>{i18n.t('home.myProperties')}</Text>
       </LinearGradient>
 
       {properties.length === 0 ? (
         <View style={styles.emptyContainer}>
-          <MaterialIcons name="home" size={80} color="#ccc" />
+          <MaterialIcons name="home" size={80} color="#73605B" />
           <Text style={styles.emptyText}>{i18n.t('home.noProperties')}</Text>
-          <Text style={styles.emptySubtext}>{i18n.t('home.addPropertyHint')}</Text>
+          <Text style={styles.emptySubtext}>
+            {i18n.t('home.addPropertyHint')}
+          </Text>
         </View>
       ) : (
         <FlatList
           data={properties}
-          renderItem={renderPropertyItem}
+          renderItem={renderPropertyCard}
           keyExtractor={(item) => item.id}
-          numColumns={2}
-          contentContainerStyle={styles.listContainer}
+          contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
         />
       )}
@@ -66,80 +104,119 @@ const PropertyListScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#F9F9FF',
   },
   header: {
-    padding: 20,
-    paddingTop: 40,
+    paddingTop: 60,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
-    marginBottom: 20,
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'white',
-    textAlign: 'center',
-    fontFamily: 'Nunito_700Bold',
-  },
-  listContainer: {
-    padding: 20,
-  },
-  propertyCard: {
-    width: ITEM_WIDTH,
-    backgroundColor: 'white',
-    borderRadius: 15,
-    marginBottom: 20,
-    marginRight: 20,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 10,
+  },
+  title: {
+    fontSize: 28,
+    fontFamily: 'Nunito_700Bold',
+    color: '#F9F9FF',
+    textShadowColor: 'rgba(0, 0, 0, 0.2)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
+  },
+  listContent: {
+    padding: 15,
+  },
+  card: {
+    width: CARD_WIDTH,
+    height: 280,
+    marginBottom: 20,
+    borderRadius: 20,
     overflow: 'hidden',
+    backgroundColor: '#FFF',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 10,
   },
-  propertyImage: {
+  cardImage: {
     width: '100%',
-    height: ITEM_WIDTH,
+    height: '100%',
   },
-  propertyInfo: {
-    padding: 10,
+  cardOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: '70%',
+    padding: 20,
   },
-  propertyType: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    fontFamily: 'Nunito_700Bold',
+  cardContent: {
+    flex: 1,
+    justifyContent: 'flex-end',
   },
-  propertyArea: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 5,
-    fontFamily: 'Nunito_400Regular',
-  },
-  propertyPrice: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#4CAF50',
-    marginTop: 5,
-    fontFamily: 'Nunito_700Bold',
-  },
-  propertyDetails: {
+  cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 10,
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  propertyType: {
+    color: '#F9F9FF',
+    fontSize: 18,
+    fontFamily: 'Nunito_700Bold',
+    textTransform: 'uppercase',
+  },
+  priceContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(54, 50, 55, 0.8)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 15,
+  },
+  price: {
+    color: '#F9F9FF',
+    fontSize: 16,
+    fontFamily: 'Nunito_700Bold',
+    marginLeft: 4,
+  },
+  cardDetails: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 15,
   },
   detailItem: {
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: 'rgba(115, 96, 91, 0.8)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 12,
   },
   detailText: {
-    marginLeft: 5,
+    color: '#F9F9FF',
+    marginLeft: 6,
     fontSize: 14,
-    color: '#666',
+    fontFamily: 'Nunito_600SemiBold',
+  },
+  locationContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  location: {
+    color: '#F9F9FF',
+    marginLeft: 6,
+    fontSize: 14,
     fontFamily: 'Nunito_400Regular',
   },
   emptyContainer: {
@@ -150,26 +227,18 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#666',
-    marginTop: 20,
-    textAlign: 'center',
+    color: '#73605B',
     fontFamily: 'Nunito_700Bold',
+    marginTop: 20,
+    marginBottom: 10,
+    textAlign: 'center',
   },
   emptySubtext: {
     fontSize: 16,
-    color: '#999',
-    marginTop: 10,
-    textAlign: 'center',
+    color: '#73605B',
     fontFamily: 'Nunito_400Regular',
-  },
-  gradient: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    padding: 10,
+    textAlign: 'center',
+    opacity: 0.8,
   },
 });
 

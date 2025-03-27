@@ -24,18 +24,28 @@ const TabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarActiveTintColor: '#4CAF50',
-        tabBarInactiveTintColor: '#999',
+        tabBarActiveTintColor: '#D55448',
+        tabBarInactiveTintColor: '#896E69',
         tabBarStyle: {
-          backgroundColor: '#fff',
+          backgroundColor: '#F9F9FF',
           borderTopWidth: 1,
-          borderTopColor: '#eee',
+          borderTopColor: '#FFA577',
           paddingBottom: 5,
           paddingTop: 5,
+          height: 60,
+          elevation: 8,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: -4,
+          },
+          shadowOpacity: 0.1,
+          shadowRadius: 4,
         },
         tabBarLabelStyle: {
-          fontFamily: 'Nunito_400Regular',
+          fontFamily: 'Nunito_700Bold',
           fontSize: 12,
+          marginBottom: 5,
         },
         headerShown: false,
       }}
@@ -68,9 +78,9 @@ const LoadingScreen = () => {
   const { currentLocale } = useLanguage();
   
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
-      <ActivityIndicator size="large" color="#4CAF50" />
-      <Text style={{ marginTop: 20, color: '#666', fontFamily: 'Nunito_400Regular' }}>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F9F9FF' }}>
+      <ActivityIndicator size="large" color="#D55448" />
+      <Text style={{ marginTop: 20, color: '#896E69', fontFamily: 'Nunito_700Bold' }}>
         {i18n.t('common.loading')}
       </Text>
     </View>
@@ -124,15 +134,29 @@ const AppContent = () => {
         screenOptions={({ route }) => ({
           headerShown: route.name !== 'Login',
           headerStyle: {
-            backgroundColor: '#4CAF50',
+            backgroundColor: '#D55448',
+            elevation: 0,
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.3,
+            shadowRadius: 4,
+            height: 110,
           },
-          headerTintColor: '#fff',
+          headerTintColor: '#F9F9FF',
           headerTitleStyle: {
             fontFamily: 'Nunito_700Bold',
+            fontSize: 20,
           },
           headerBackTitle: i18n.t('common.back'),
           headerBackTitleStyle: {
-            fontFamily: 'Nunito_400Regular',
+            fontFamily: 'Nunito_700Bold',
+            color: '#F9F9FF',
+          },
+          cardStyle: {
+            backgroundColor: '#F9F9FF',
           },
         })}
       >

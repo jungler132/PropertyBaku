@@ -19,14 +19,16 @@ const LanguageSelector = () => {
           key={lang.code}
           style={[
             styles.languageButton,
-            currentLocale === lang.code && styles.activeButton
+            currentLocale === lang.code && styles.activeLanguageButton,
           ]}
           onPress={() => setLanguage(lang.code)}
         >
-          <Text style={[
-            styles.languageText,
-            currentLocale === lang.code && styles.activeText
-          ]}>
+          <Text
+            style={[
+              styles.languageText,
+              currentLocale === lang.code && styles.activeLanguageText,
+            ]}
+          >
             {lang.label}
           </Text>
         </TouchableOpacity>
@@ -40,35 +42,35 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 20,
-    gap: 10,
-  },
-  languageButton: {
-    backgroundColor: '#f0f0f0',
-    paddingHorizontal: 15,
-    paddingVertical: 8,
-    borderRadius: 20,
-    minWidth: 50,
-    alignItems: 'center',
+    backgroundColor: '#F9F9FF',
+    borderRadius: 25,
+    padding: 5,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
-  activeButton: {
-    backgroundColor: '#4CAF50',
+  languageButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 20,
+    marginHorizontal: 4,
+  },
+  activeLanguageButton: {
+    backgroundColor: '#D55448',
   },
   languageText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
+    fontSize: 14,
+    fontFamily: 'Nunito_600SemiBold',
+    color: '#896E69',
   },
-  activeText: {
-    color: '#fff',
+  activeLanguageText: {
+    color: '#F9F9FF',
+    fontFamily: 'Nunito_700Bold',
   },
 });
 

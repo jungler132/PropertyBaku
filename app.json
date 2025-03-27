@@ -1,16 +1,16 @@
 {
   "expo": {
-    "name": "PropertyBaku",
-    "slug": "PropertyBaku",
+    "name": "PropertyBakuApp",
+    "slug": "PropertyBakuApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#F9F9FF"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -25,8 +25,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/logo.png",
+        "backgroundColor": "#F9F9FF"
       },
       "package": "com.propertybaku.app",
       "permissions": [
@@ -36,7 +36,7 @@
       ]
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/logo.png"
     },
     "plugins": [
       [
@@ -50,9 +50,15 @@
         "expo-localization",
         {
           "fallbackLocale": "az",
-          "supportedLocales": ["az", "ru", "tr", "en"]
+          "supportedLocales": [
+            "az",
+            "ru",
+            "tr",
+            "en"
+          ]
         }
-      ]
+      ],
+      "expo-font"
     ]
   }
 }

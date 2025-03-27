@@ -1,10 +1,22 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  Dimensions,
+} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { MaterialIcons } from '@expo/vector-icons';
 import i18n from '../translations/i18n';
+import Logo from '../components/Logo';
 import LanguageSelector from '../components/LanguageSelector';
 import { useLanguage } from '../translations/i18n';
+
+const { width } = Dimensions.get('window');
 
 const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -23,52 +35,60 @@ const LoginScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#4CAF50', '#2196F3']}
+        colors={['#363237', '#2D4262']}
+        style={styles.background}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        style={styles.gradient}
       >
-        <View style={styles.content}>
-          <MaterialIcons name="home" size={80} color="white" />
-          <Text style={styles.title}>PropertyBaku</Text>
+        <View style={styles.logoContainer}>
+          <Logo size="large" />
+        </View>
 
-          <LanguageSelector />
-
+        <View style={styles.formContainer}>
           <View style={styles.inputContainer}>
-            <MaterialIcons name="person" size={24} color="#4CAF50" style={styles.icon} />
+            <MaterialIcons name="person" size={24} color="#896E69" />
             <TextInput
               style={styles.input}
               placeholder={i18n.t('common.email')}
+              placeholderTextColor="#896E69"
               value={username}
               onChangeText={setUsername}
-              placeholderTextColor="#666"
+              autoCapitalize="none"
             />
           </View>
 
           <View style={styles.inputContainer}>
-            <MaterialIcons name="lock" size={24} color="#4CAF50" style={styles.icon} />
+            <MaterialIcons name="lock" size={24} color="#896E69" />
             <TextInput
               style={styles.input}
               placeholder={i18n.t('common.password')}
+              placeholderTextColor="#896E69"
               value={password}
               onChangeText={setPassword}
               secureTextEntry
-              placeholderTextColor="#666"
             />
           </View>
 
           {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
-          <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <TouchableOpacity
+            style={styles.loginButton}
+            onPress={handleLogin}
+            activeOpacity={0.8}
+          >
             <LinearGradient
-              colors={['#4CAF50', '#2196F3']}
+              colors={['#73605B', '#D09683']}
               start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.buttonGradient}
+              end={{ x: 1, y: 0 }}
+              style={styles.loginButtonGradient}
             >
-              <Text style={styles.buttonText}>{i18n.t('common.login')}</Text>
+              <Text style={styles.loginButtonText}>{i18n.t('common.login')}</Text>
             </LinearGradient>
           </TouchableOpacity>
+
+          <View style={styles.languageSelectorContainer}>
+            <LanguageSelector />
+          </View>
         </View>
       </LinearGradient>
     </View>
@@ -79,79 +99,76 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  gradient: {
-    flex: 1,
-  },
-  content: {
+  background: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
   },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: 'white',
-    marginBottom: 30,
-    fontFamily: 'Nunito_700Bold',
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 50,
+  },
+  formContainer: {
+    width: '80%',
+    alignItems: 'center',
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'white',
-    borderRadius: 15,
-    paddingHorizontal: 15,
+    backgroundColor: '#F9F9FF',
+    borderRadius: 12,
     marginBottom: 15,
-    width: '100%',
-    height: 60,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  icon: {
-    marginRight: 10,
+    paddingHorizontal: 15,
+    borderWidth: 2,
+    borderColor: '#FFA577',
   },
   input: {
     flex: 1,
+    height: 50,
+    marginLeft: 10,
+    color: '#896E69',
     fontSize: 16,
-    color: '#333',
     fontFamily: 'Nunito_400Regular',
   },
-  button: {
+  loginButton: {
     width: '100%',
-    borderRadius: 15,
+    height: 50,
+    borderRadius: 25,
     overflow: 'hidden',
-    marginTop: 20,
+    marginBottom: 20,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
   },
-  buttonGradient: {
-    padding: 15,
+  loginButtonGradient: {
+    flex: 1,
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
   },
-  buttonText: {
-    color: 'white',
+  loginButtonText: {
+    color: '#F9F9FF',
     fontSize: 18,
     fontWeight: 'bold',
+    marginLeft: 10,
     fontFamily: 'Nunito_700Bold',
   },
   errorText: {
-    color: '#FF3B30',
+    color: '#D55448',
     fontSize: 14,
-    marginTop: 5,
-    textAlign: 'center',
     fontFamily: 'Nunito_400Regular',
+    textAlign: 'center',
+    marginTop: 10,
+  },
+  languageSelectorContainer: {
+    marginTop: 20,
+    width: '100%',
   },
 });
 
