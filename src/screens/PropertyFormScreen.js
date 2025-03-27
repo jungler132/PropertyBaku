@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet, ScrollView, Switch, Image, Dimensions } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, StyleSheet, ScrollView, Switch, Image, Dimensions, Alert } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import * as MediaLibrary from 'expo-media-library';
 import { Video } from 'expo-av';
+import { LinearGradient } from 'expo-linear-gradient';
 
-const PropertyFormScreen = () => {
+const PropertyFormScreen = ({ navigation }) => {
   const [property, setProperty] = useState({
     type: '',
     area: '',
@@ -80,18 +81,36 @@ const PropertyFormScreen = () => {
     setMediaFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
   };
 
+  const validateForm = () => {
+    if (!property.type || !property.area || !property.landArea || !property.bedrooms || !property.bathrooms) {
+      Alert.alert('Xəta', 'Zəhmət olmasa bütün məlumatları doldurun');
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = () => {
-    console.log('Property data:', property);
-    console.log('Media files:', mediaFiles);
-    // Здесь будет логика отправки данных
+    if (!validateForm()) return;
+    
+    navigation.navigate('PropertySummary', {
+      property,
+      mediaFiles,
+    });
   };
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.formContainer}>
-        <MaterialIcons name="add-home" size={40} color="#2196F3" />
+      <LinearGradient
+        colors={['#4CAF50', '#2196F3']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.header}
+      >
+        <MaterialIcons name="add-home" size={40} color="white" />
         <Text style={styles.title}>Əmlak əlavə et</Text>
+      </LinearGradient>
 
+      <View style={styles.formContainer}>
         <View style={styles.inputContainer}>
           <MaterialIcons name="house" size={24} color="#4CAF50" style={styles.icon} />
           <TextInput
@@ -160,7 +179,7 @@ const PropertyFormScreen = () => {
             value={property.hasParking}
             onValueChange={(value) => setProperty({ ...property, hasParking: value })}
             trackColor={{ false: '#767577', true: '#81b0ff' }}
-            thumbColor={property.hasParking ? '#4CAF50' : '#f4ddb2'}
+            thumbColor={property.hasParking ? '#4CAF50' : '#f4f3f4'}
           />
         </View>
 
@@ -173,22 +192,36 @@ const PropertyFormScreen = () => {
             value={property.hasGarage}
             onValueChange={(value) => setProperty({ ...property, hasGarage: value })}
             trackColor={{ false: '#767577', true: '#81b0ff' }}
-            thumbColor={property.hasGarage ? '#4CAF50' : '#f4ddb2'}
+            thumbColor={property.hasGarage ? '#4CAF50' : '#f4f3f4'}
           />
         </View>
 
         <View style={styles.mediaSection}>
-          <Text style={styles.mediaTitle}>Şəkil və video əlavə et</Text>
+          <Text style={styles.mediaSectionTitle}>Şəkil və video əlavə et</Text>
           
           <View style={styles.mediaButtons}>
             <TouchableOpacity style={styles.mediaButton} onPress={pickImage}>
-              <MaterialIcons name="photo-camera" size={24} color="white" />
-              <Text style={styles.mediaButtonText}>Şəkil</Text>
+              <LinearGradient
+                colors={['#4CAF50', '#2196F3']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.mediaButtonGradient}
+              >
+                <MaterialIcons name="photo-camera" size={24} color="white" />
+                <Text style={styles.mediaButtonText}>Şəkil</Text>
+              </LinearGradient>
             </TouchableOpacity>
             
             <TouchableOpacity style={styles.mediaButton} onPress={pickVideo}>
-              <MaterialIcons name="videocam" size={24} color="white" />
-              <Text style={styles.mediaButtonText}>Video</Text>
+              <LinearGradient
+                colors={['#4CAF50', '#2196F3']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.mediaButtonGradient}
+              >
+                <MaterialIcons name="videocam" size={24} color="white" />
+                <Text style={styles.mediaButtonText}>Video</Text>
+              </LinearGradient>
             </TouchableOpacity>
           </View>
 
@@ -218,9 +251,16 @@ const PropertyFormScreen = () => {
           </View>
         </View>
 
-        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-          <MaterialIcons name="save" size={24} color="white" style={styles.buttonIcon} />
-          <Text style={styles.buttonText}>Yadda saxla</Text>
+        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+          <LinearGradient
+            colors={['#4CAF50', '#2196F3']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.submitButtonGradient}
+          >
+            <MaterialIcons name="save" size={24} color="white" style={styles.submitButtonIcon} />
+            <Text style={styles.submitButtonText}>Yadda saxla</Text>
+          </LinearGradient>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -233,18 +273,22 @@ const mediaItemSize = (width - 60) / 2;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E3F2FD',
+    backgroundColor: '#F5F5F5',
   },
-  formContainer: {
+  header: {
     padding: 20,
     alignItems: 'center',
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#2196F3',
-    marginBottom: 30,
-    textAlign: 'center',
+    color: 'white',
+    marginTop: 10,
+  },
+  formContainer: {
+    padding: 20,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -252,17 +296,22 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     marginBottom: 15,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: '#4CAF50',
-    width: '100%',
+    paddingHorizontal: 15,
+    height: 60,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   icon: {
     marginRight: 10,
   },
   input: {
     flex: 1,
-    height: 50,
     fontSize: 16,
     color: '#333',
   },
@@ -274,9 +323,14 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     marginBottom: 15,
-    borderWidth: 1,
-    borderColor: '#4CAF50',
-    width: '100%',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   switchLabelContainer: {
     flexDirection: 'row',
@@ -290,13 +344,12 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   mediaSection: {
-    width: '100%',
-    marginBottom: 20,
+    marginTop: 20,
   },
-  mediaTitle: {
-    fontSize: 18,
+  mediaSectionTitle: {
+    fontSize: 20,
     fontWeight: 'bold',
-    color: '#2196F3',
+    color: '#333',
     marginBottom: 15,
   },
   mediaButtons: {
@@ -305,18 +358,29 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   mediaButton: {
+    width: '48%',
+    borderRadius: 10,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  mediaButtonGradient: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#4CAF50',
-    padding: 10,
-    borderRadius: 8,
-    width: '48%',
     justifyContent: 'center',
+    padding: 15,
   },
   mediaButtonText: {
     color: 'white',
     marginLeft: 8,
     fontSize: 16,
+    fontWeight: 'bold',
   },
   mediaGrid: {
     flexDirection: 'row',
@@ -327,8 +391,17 @@ const styles = StyleSheet.create({
     width: mediaItemSize,
     height: mediaItemSize,
     marginBottom: 10,
-    borderRadius: 8,
+    borderRadius: 15,
     overflow: 'hidden',
+    backgroundColor: '#E0E0E0',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   mediaPreview: {
     width: '100%',
@@ -342,20 +415,29 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 5,
   },
-  button: {
-    backgroundColor: '#4CAF50',
-    padding: 15,
-    borderRadius: 10,
-    alignItems: 'center',
+  submitButton: {
     marginTop: 20,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    width: '100%',
+    borderRadius: 10,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
-  buttonIcon: {
+  submitButtonGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 15,
+  },
+  submitButtonIcon: {
     marginRight: 10,
   },
-  buttonText: {
+  submitButtonText: {
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',

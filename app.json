@@ -18,8 +18,9 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSPhotoLibraryUsageDescription": "Bu tətbiq şəkil və video seçmək üçün qalereyanıza daxil olmaq istəyir",
-        "NSCameraUsageDescription": "Bu tətbiq şəkil və video çəkmək üçün kameranıza daxil olmaq istəyir"
+        "NSPhotoLibraryUsageDescription": "Allow $(PRODUCT_NAME) to access your photos",
+        "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access your camera",
+        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
       }
     },
     "android": {
@@ -28,9 +29,10 @@
         "backgroundColor": "#ffffff"
       },
       "permissions": [
-        "CAMERA",
-        "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE"
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO"
       ]
     },
     "web": {
@@ -40,8 +42,8 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Bu tətbiq şəkil və video seçmək üçün qalereyanıza daxil olmaq istəyir",
-          "cameraPermission": "Bu tətbiq şəkil və video çəkmək üçün kameranıza daxil olmaq istəyir"
+          "photosPermission": "The app needs access to your photos to let you share them with your listing.",
+          "cameraPermission": "The app needs access to your camera to let you take photos for your listing."
         }
       ]
     ]
