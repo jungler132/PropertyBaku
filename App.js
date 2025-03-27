@@ -15,17 +15,22 @@ import SuccessScreen from './src/screens/SuccessScreen';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function TabNavigator() {
+const TabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={{
         tabBarActiveTintColor: '#4CAF50',
-        tabBarInactiveTintColor: '#666',
+        tabBarInactiveTintColor: '#999',
         tabBarStyle: {
-          backgroundColor: 'white',
-          borderTopWidth: 0,
-          elevation: 0,
-          shadowOpacity: 0,
+          backgroundColor: '#fff',
+          borderTopWidth: 1,
+          borderTopColor: '#eee',
+          paddingBottom: 5,
+          paddingTop: 5,
+        },
+        tabBarLabelStyle: {
+          fontFamily: 'Nunito_400Regular',
+          fontSize: 12,
         },
         headerShown: false,
       }}
@@ -34,25 +39,25 @@ function TabNavigator() {
         name="Properties"
         component={PropertyListScreen}
         options={{
-          tabBarLabel: 'Əmlaklarım',
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="home" size={size} color={color} />
           ),
+          tabBarLabel: 'Əmlaklar',
         }}
       />
       <Tab.Screen
         name="AddProperty"
         component={PropertyFormScreen}
         options={{
-          tabBarLabel: 'Əlavə et',
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="add-circle" size={size} color={color} />
           ),
+          tabBarLabel: 'Əlavə et',
         }}
       />
     </Tab.Navigator>
   );
-}
+};
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -83,14 +88,50 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName="Login"
-          screenOptions={{
-            headerShown: false,
-          }}
+          screenOptions={({ route }) => ({
+            headerShown: route.name !== 'Login',
+            headerStyle: {
+              backgroundColor: '#4CAF50',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontFamily: 'Nunito_700Bold',
+            },
+            headerBackTitle: 'Geri',
+            headerBackTitleStyle: {
+              fontFamily: 'Nunito_400Regular',
+            },
+          })}
         >
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="MainTabs" component={TabNavigator} />
-          <Stack.Screen name="PropertyDetails" component={PropertyDetailsScreen} />
-          <Stack.Screen name="Success" component={SuccessScreen} />
+          <Stack.Screen 
+            name="Login" 
+            component={LoginScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen 
+            name="MainTabs" 
+            component={TabNavigator}
+            options={{
+              title: 'Əsas Səhifə',
+            }}
+          />
+          <Stack.Screen 
+            name="PropertyDetails" 
+            component={PropertyDetailsScreen}
+            options={{
+              title: 'Əmlak Məlumatları',
+            }}
+          />
+          <Stack.Screen 
+            name="Success" 
+            component={SuccessScreen}
+            options={{
+              headerBackVisible: false,
+              title: 'Uğurlu',
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </PropertyProvider>

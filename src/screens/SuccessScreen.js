@@ -4,6 +4,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const SuccessScreen = ({ navigation, route }) => {
+  const { property, mediaFiles } = route.params;
   const scaleAnim = new Animated.Value(0);
   const opacityAnim = new Animated.Value(0);
 
@@ -15,69 +16,81 @@ const SuccessScreen = ({ navigation, route }) => {
       }),
       Animated.timing(opacityAnim, {
         toValue: 1,
-        duration: 500,
+        duration: 1000,
         useNativeDriver: true,
       }),
     ]).start();
 
     const timer = setTimeout(() => {
-      navigation.replace('PropertySummary', route.params);
+      navigation.replace('PropertyDetails', { property });
     }, 3000);
 
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <View style={styles.container}>
-      <LinearGradient
-        colors={['#4CAF50', '#2196F3']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.gradient}
+    <LinearGradient
+      colors={['#4CAF50', '#2196F3']}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.container}
+    >
+      <Animated.View
+        style={[
+          styles.iconContainer,
+          {
+            transform: [{ scale: scaleAnim }],
+            opacity: opacityAnim,
+          },
+        ]}
       >
-        <Animated.View
-          style={[
-            styles.content,
-            {
-              transform: [{ scale: scaleAnim }],
-              opacity: opacityAnim,
-            },
-          ]}
-        >
-          <MaterialIcons name="check-circle" size={100} color="white" />
-          <Text style={styles.title}>Təbriklər!</Text>
-          <Text style={styles.subtitle}>Əmlak uğurla əlavə edildi</Text>
-        </Animated.View>
-      </LinearGradient>
-    </View>
+        <MaterialIcons name="check-circle" size={120} color="white" />
+      </Animated.View>
+
+      <Animated.Text
+        style={[
+          styles.title,
+          {
+            opacity: opacityAnim,
+          },
+        ]}
+      >
+        Təbriklər!
+      </Animated.Text>
+
+      <Animated.Text
+        style={[
+          styles.subtitle,
+          {
+            opacity: opacityAnim,
+          },
+        ]}
+      >
+        Əmlakınız uğurla əlavə edildi
+      </Animated.Text>
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  gradient: {
-    flex: 1,
-  },
-  content: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+  },
+  iconContainer: {
+    marginBottom: 30,
   },
   title: {
-    fontSize: 32,
+    fontSize: 36,
     fontWeight: 'bold',
-    color: '#4CAF50',
-    marginTop: 20,
-    textAlign: 'center',
+    color: 'white',
+    marginBottom: 10,
     fontFamily: 'Nunito_700Bold',
   },
   subtitle: {
     fontSize: 18,
-    color: '#666',
-    marginTop: 10,
+    color: 'white',
     textAlign: 'center',
     fontFamily: 'Nunito_400Regular',
   },
