@@ -45,6 +45,13 @@
           "photosPermission": "Əmlak şəkillərini seçmək üçün foto kitabxanaya giriş lazımdır",
           "cameraPermission": "Əmlak şəkillərini çəkmək üçün kameraya giriş lazımdır"
         }
+      ],
+      [
+        "expo-localization",
+        {
+          "fallbackLocale": "az",
+          "supportedLocales": ["az", "ru", "tr", "en"]
+        }
       ]
     ]
   }

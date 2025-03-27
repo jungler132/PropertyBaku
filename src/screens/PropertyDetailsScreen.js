@@ -4,6 +4,8 @@ import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Video } from 'expo-av';
 import { useProperty } from '../context/PropertyContext';
+import i18n from '../translations/i18n';
+import { useLanguage } from '../translations/i18n';
 
 const { width } = Dimensions.get('window');
 
@@ -11,6 +13,7 @@ const PropertyDetailsScreen = ({ route, navigation }) => {
   const { property } = route.params;
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const { removeProperty } = useProperty();
+  const { currentLocale } = useLanguage();
 
   const handleDelete = () => {
     removeProperty(property.id);
@@ -23,7 +26,7 @@ const PropertyDetailsScreen = ({ route, navigation }) => {
       <View style={styles.infoRow}>
         <FontAwesome5 name={icon} size={24} color="#4CAF50" />
         <Text style={styles.infoLabel}>{label}:</Text>
-        <Text style={styles.infoValue}>{value ? 'Var' : 'Yox'}</Text>
+        <Text style={styles.infoValue}>{value ? i18n.t('common.yes') : i18n.t('common.no')}</Text>
       </View>
     );
   };
@@ -39,7 +42,7 @@ const PropertyDetailsScreen = ({ route, navigation }) => {
           colors={['transparent', 'rgba(0,0,0,0.7)']}
           style={styles.imageGradient}
         >
-          <Text style={styles.imageTitle}>{property.type}</Text>
+          <Text style={styles.imageTitle}>{i18n.t(`propertyTypes.${property.type}`)}</Text>
           <Text style={styles.imageSubtitle}>{property.location}</Text>
         </LinearGradient>
       </View>
@@ -47,63 +50,63 @@ const PropertyDetailsScreen = ({ route, navigation }) => {
       <View style={styles.content}>
         <View style={styles.priceContainer}>
           <Text style={styles.price}>${property.price}</Text>
-          <Text style={styles.area}>{property.area} m²</Text>
+          <Text style={styles.area}>{property.area} {i18n.t('common.squareMeters')}</Text>
         </View>
 
         <View style={styles.infoSection}>
-          <Text style={styles.sectionTitle}>Əsas məlumatlar</Text>
+          <Text style={styles.sectionTitle}>{i18n.t('propertyDetails.mainInfo')}</Text>
 
           <View style={styles.infoRow}>
             <MaterialIcons name="bed" size={24} color="#4CAF50" />
-            <Text style={styles.infoLabel}>Yataq otaqları:</Text>
+            <Text style={styles.infoLabel}>{i18n.t('propertyDetails.bedrooms')}:</Text>
             <Text style={styles.infoValue}>{property.bedrooms}</Text>
           </View>
 
           <View style={styles.infoRow}>
             <MaterialIcons name="bathroom" size={24} color="#4CAF50" />
-            <Text style={styles.infoLabel}>Sanitar qovşaqlar:</Text>
+            <Text style={styles.infoLabel}>{i18n.t('propertyDetails.bathrooms')}:</Text>
             <Text style={styles.infoValue}>{property.bathrooms}</Text>
           </View>
 
           <View style={styles.infoRow}>
             <MaterialIcons name="garage" size={24} color="#4CAF50" />
-            <Text style={styles.infoLabel}>Qaraj:</Text>
-            <Text style={styles.infoValue}>{property.hasGarage ? 'Var' : 'Yox'}</Text>
+            <Text style={styles.infoLabel}>{i18n.t('propertyDetails.garage')}:</Text>
+            <Text style={styles.infoValue}>{property.hasGarage ? i18n.t('common.yes') : i18n.t('common.no')}</Text>
           </View>
         </View>
 
         <View style={styles.infoSection}>
-          <Text style={styles.sectionTitle}>Əlavə imkanlar</Text>
+          <Text style={styles.sectionTitle}>{i18n.t('propertyDetails.additionalFeatures')}</Text>
 
-          {renderFeatureRow('swimming-pool', 'Hovuz', property.hasPool)}
-          {renderFeatureRow('child', 'Uşaq otağı', property.hasKidsRoom)}
-          {renderFeatureRow('tree', 'Qış bağı', property.hasWinterGarden)}
-          {renderFeatureRow('water', 'Bio hovuz', property.hasBioPool)}
-          {renderFeatureRow('futbol', 'Futbol meydançası', property.hasFootballField)}
-          {renderFeatureRow('basketball-ball', 'Basketbol meydançası', property.hasBasketballCourt)}
-          {renderFeatureRow('table-tennis', 'Tennis kortu', property.hasTennisCourt)}
-          {renderFeatureRow('dumbbell', 'Trenajor zalı', property.hasGym)}
-          {renderFeatureRow('hot-tub', 'Sauna', property.hasSauna)}
-          {renderFeatureRow('bath', 'Jakuzi', property.hasJacuzzi)}
-          {renderFeatureRow('wine-bottle', 'Şərab zirzəmisi', property.hasWineCellar)}
+          {renderFeatureRow('swimming-pool', i18n.t('propertyDetails.pool'), property.hasPool)}
+          {renderFeatureRow('child', i18n.t('propertyDetails.kidsRoom'), property.hasKidsRoom)}
+          {renderFeatureRow('tree', i18n.t('propertyDetails.winterGarden'), property.hasWinterGarden)}
+          {renderFeatureRow('water', i18n.t('propertyDetails.bioPool'), property.hasBioPool)}
+          {renderFeatureRow('futbol', i18n.t('propertyDetails.footballField'), property.hasFootballField)}
+          {renderFeatureRow('basketball-ball', i18n.t('propertyDetails.basketballCourt'), property.hasBasketballCourt)}
+          {renderFeatureRow('table-tennis', i18n.t('propertyDetails.tennisCourt'), property.hasTennisCourt)}
+          {renderFeatureRow('dumbbell', i18n.t('propertyDetails.gym'), property.hasGym)}
+          {renderFeatureRow('hot-tub', i18n.t('propertyDetails.sauna'), property.hasSauna)}
+          {renderFeatureRow('bath', i18n.t('propertyDetails.jacuzzi'), property.hasJacuzzi)}
+          {renderFeatureRow('wine-bottle', i18n.t('propertyDetails.wineCellar'), property.hasWineCellar)}
         </View>
 
         <View style={styles.infoSection}>
-          <Text style={styles.sectionTitle}>Sahibkar məlumatları</Text>
+          <Text style={styles.sectionTitle}>{i18n.t('propertyDetails.ownerInfo')}</Text>
           <View style={styles.infoRow}>
             <MaterialIcons name="person" size={24} color="#4CAF50" />
-            <Text style={styles.infoLabel}>Ad Soyad:</Text>
+            <Text style={styles.infoLabel}>{i18n.t('propertyDetails.fullName')}:</Text>
             <Text style={styles.infoValue}>{property.ownerName}</Text>
           </View>
           <View style={styles.infoRow}>
             <MaterialIcons name="phone" size={24} color="#4CAF50" />
-            <Text style={styles.infoLabel}>Telefon:</Text>
+            <Text style={styles.infoLabel}>{i18n.t('propertyDetails.phone')}:</Text>
             <Text style={styles.infoValue}>{property.ownerPhone}</Text>
           </View>
         </View>
 
         <View style={styles.mediaSection}>
-          <Text style={styles.sectionTitle}>Şəkillər və Videolar</Text>
+          <Text style={styles.sectionTitle}>{i18n.t('propertyDetails.media')}</Text>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -133,7 +136,7 @@ const PropertyDetailsScreen = ({ route, navigation }) => {
 
         <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
           <MaterialIcons name="delete" size={24} color="white" />
-          <Text style={styles.deleteButtonText}>Əmlakı sil</Text>
+          <Text style={styles.deleteButtonText}>{i18n.t('propertyDetails.deleteProperty')}</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

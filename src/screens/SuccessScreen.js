@@ -2,9 +2,12 @@ import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Animated } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import i18n from '../translations/i18n';
+import { useLanguage } from '../translations/i18n';
 
 const SuccessScreen = ({ navigation, route }) => {
   const { property, mediaFiles } = route.params;
+  const { currentLocale } = useLanguage();
   const scaleAnim = new Animated.Value(0);
   const opacityAnim = new Animated.Value(0);
 
@@ -55,7 +58,7 @@ const SuccessScreen = ({ navigation, route }) => {
           },
         ]}
       >
-        Təbriklər!
+        {i18n.t('success.congratulations')}
       </Animated.Text>
 
       <Animated.Text
@@ -66,7 +69,7 @@ const SuccessScreen = ({ navigation, route }) => {
           },
         ]}
       >
-        Əmlakınız uğurla əlavə edildi
+        {i18n.t('success.propertyAdded')}
       </Animated.Text>
     </LinearGradient>
   );

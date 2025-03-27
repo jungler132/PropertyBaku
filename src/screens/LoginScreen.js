@@ -2,17 +2,21 @@ import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import i18n from '../translations/i18n';
+import LanguageSelector from '../components/LanguageSelector';
+import { useLanguage } from '../translations/i18n';
 
 const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const { currentLocale } = useLanguage();
 
   const handleLogin = () => {
     if (username === 'admin' && password === 'admin') {
       navigation.replace('MainTabs');
     } else {
-      setError('Yanlış istifadəçi adı və ya şifrə');
+      setError(i18n.t('common.errorLogin'));
     }
   };
 
@@ -28,11 +32,13 @@ const LoginScreen = ({ navigation }) => {
           <MaterialIcons name="home" size={80} color="white" />
           <Text style={styles.title}>PropertyBaku</Text>
 
+          <LanguageSelector />
+
           <View style={styles.inputContainer}>
             <MaterialIcons name="person" size={24} color="#4CAF50" style={styles.icon} />
             <TextInput
               style={styles.input}
-              placeholder="İstifadəçi adı"
+              placeholder={i18n.t('common.email')}
               value={username}
               onChangeText={setUsername}
               placeholderTextColor="#666"
@@ -43,7 +49,7 @@ const LoginScreen = ({ navigation }) => {
             <MaterialIcons name="lock" size={24} color="#4CAF50" style={styles.icon} />
             <TextInput
               style={styles.input}
-              placeholder="Şifrə"
+              placeholder={i18n.t('common.password')}
               value={password}
               onChangeText={setPassword}
               secureTextEntry
@@ -60,7 +66,7 @@ const LoginScreen = ({ navigation }) => {
               end={{ x: 1, y: 1 }}
               style={styles.buttonGradient}
             >
-              <Text style={styles.buttonText}>Daxil ol</Text>
+              <Text style={styles.buttonText}>{i18n.t('common.login')}</Text>
             </LinearGradient>
           </TouchableOpacity>
         </View>

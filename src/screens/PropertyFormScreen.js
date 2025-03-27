@@ -7,6 +7,8 @@ import { Video } from 'expo-av';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import { useProperty } from '../context/PropertyContext';
+import i18n from '../translations/i18n';
+import { useLanguage } from '../translations/i18n';
 
 const COUNTRY_CODES = [
   { code: '+994', country: 'AZ' },
@@ -23,6 +25,7 @@ const COUNTRY_CODES = [
 
 const PropertyFormScreen = ({ navigation }) => {
   const { addProperty } = useProperty();
+  const { currentLocale } = useLanguage();
   const [property, setProperty] = useState({
     owner: '',
     phoneCode: '+994',
@@ -54,7 +57,7 @@ const PropertyFormScreen = ({ navigation }) => {
   const requestPermissions = async () => {
     const { status } = await MediaLibrary.requestPermissionsAsync();
     if (status !== 'granted') {
-      alert('Üzr istəyirik, şəkil və video seçmək üçün icazə lazımdır!');
+      alert(i18n.t('alerts.mediaPermissionRequired'));
       return false;
     }
     return true;
@@ -80,7 +83,7 @@ const PropertyFormScreen = ({ navigation }) => {
       }
     } catch (error) {
       console.error('Error picking image:', error);
-      alert('Şəkil seçərkən xəta baş verdi');
+      alert(i18n.t('alerts.imagePickError'));
     }
   };
 
@@ -104,7 +107,7 @@ const PropertyFormScreen = ({ navigation }) => {
       }
     } catch (error) {
       console.error('Error picking video:', error);
-      alert('Video seçərkən xəta baş verdi');
+      alert(i18n.t('alerts.videoPickError'));
     }
   };
 
@@ -114,7 +117,7 @@ const PropertyFormScreen = ({ navigation }) => {
 
   const validateForm = () => {
     if (!property.owner || !property.phoneNumber || !property.type || !property.area || !property.landArea || !property.bedrooms || !property.bathrooms || !property.hasGarage || mediaFiles.length === 0) {
-      Alert.alert('Xəta', 'Zəhmət olmasa bütün vacib məlumatları doldurun və ən azı bir şəkil əlavə edin');
+      Alert.alert(i18n.t('alerts.error'), i18n.t('alerts.fillRequiredFields'));
       return false;
     }
     return true;
@@ -158,17 +161,17 @@ const PropertyFormScreen = ({ navigation }) => {
         style={styles.header}
       >
         <MaterialIcons name="add-home" size={40} color="white" />
-        <Text style={styles.title}>Əmlak əlavə et</Text>
+        <Text style={styles.title}>{i18n.t('propertyForm.addProperty')}</Text>
       </LinearGradient>
 
       <View style={styles.formContainer}>
-        <Text style={styles.sectionTitle}>Sahibkar məlumatları *</Text>
+        <Text style={styles.sectionTitle}>{i18n.t('propertyForm.ownerInfo')} *</Text>
         
         <View style={styles.inputContainer}>
           <MaterialIcons name="person" size={24} color="#4CAF50" style={styles.icon} />
           <TextInput
             style={styles.input}
-            placeholder="Sahibkar *"
+            placeholder={i18n.t('propertyForm.owner') + ' *'}
             value={property.owner}
             onChangeText={(text) => setProperty({ ...property, owner: text })}
             placeholderTextColor="#666"
@@ -185,7 +188,7 @@ const PropertyFormScreen = ({ navigation }) => {
           </TouchableOpacity>
           <TextInput
             style={styles.phoneInput}
-            placeholder="Telefon nömrəsi *"
+            placeholder={i18n.t('propertyForm.phoneNumber') + ' *'}
             value={property.phoneNumber}
             onChangeText={(text) => setProperty({ ...property, phoneNumber: text })}
             keyboardType="phone-pad"
@@ -194,13 +197,13 @@ const PropertyFormScreen = ({ navigation }) => {
           />
         </View>
 
-        <Text style={styles.sectionTitle}>Əsas məlumatlar *</Text>
+        <Text style={styles.sectionTitle}>{i18n.t('propertyForm.mainInfo')} *</Text>
         
         <View style={styles.inputContainer}>
           <MaterialIcons name="house" size={24} color="#4CAF50" style={styles.icon} />
           <TextInput
             style={styles.input}
-            placeholder="Ev növü *"
+            placeholder={i18n.t('propertyForm.propertyType') + ' *'}
             value={property.type}
             onChangeText={(text) => setProperty({ ...property, type: text })}
             placeholderTextColor="#666"
@@ -211,7 +214,7 @@ const PropertyFormScreen = ({ navigation }) => {
           <MaterialIcons name="square-foot" size={24} color="#4CAF50" style={styles.icon} />
           <TextInput
             style={styles.input}
-            placeholder="Sahə (m²) *"
+            placeholder={i18n.t('propertyForm.area') + ' *'}
             value={property.area}
             onChangeText={(text) => setProperty({ ...property, area: text })}
             keyboardType="numeric"
@@ -223,7 +226,7 @@ const PropertyFormScreen = ({ navigation }) => {
           <MaterialIcons name="landscape" size={24} color="#4CAF50" style={styles.icon} />
           <TextInput
             style={styles.input}
-            placeholder="Torpaq sahəsi (sotka) *"
+            placeholder={i18n.t('propertyForm.landArea') + ' *'}
             value={property.landArea}
             onChangeText={(text) => setProperty({ ...property, landArea: text })}
             keyboardType="numeric"
@@ -235,7 +238,7 @@ const PropertyFormScreen = ({ navigation }) => {
           <MaterialIcons name="bed" size={24} color="#4CAF50" style={styles.icon} />
           <TextInput
             style={styles.input}
-            placeholder="Yataq otaqlarının sayı *"
+            placeholder={i18n.t('propertyForm.bedrooms') + ' *'}
             value={property.bedrooms}
             onChangeText={(text) => setProperty({ ...property, bedrooms: text })}
             keyboardType="numeric"
@@ -247,7 +250,7 @@ const PropertyFormScreen = ({ navigation }) => {
           <MaterialIcons name="bathroom" size={24} color="#4CAF50" style={styles.icon} />
           <TextInput
             style={styles.input}
-            placeholder="Sanitar qovşaqların sayı *"
+            placeholder={i18n.t('propertyForm.bathrooms') + ' *'}
             value={property.bathrooms}
             onChangeText={(text) => setProperty({ ...property, bathrooms: text })}
             keyboardType="numeric"
@@ -258,7 +261,7 @@ const PropertyFormScreen = ({ navigation }) => {
         <View style={[styles.switchContainer, styles.requiredSwitch]}>
           <View style={styles.switchLabelContainer}>
             <MaterialIcons name="garage" size={24} color="#4CAF50" style={styles.switchIcon} />
-            <Text style={styles.switchLabel}>Qaraj *</Text>
+            <Text style={styles.switchLabel}>{i18n.t('propertyForm.garage')} *</Text>
           </View>
           <Switch
             value={property.hasGarage}
@@ -268,24 +271,24 @@ const PropertyFormScreen = ({ navigation }) => {
           />
         </View>
 
-        <Text style={styles.sectionTitle}>Əlavə imkanlar</Text>
+        <Text style={styles.sectionTitle}>{i18n.t('propertyForm.additionalFeatures')}</Text>
 
-        {renderFeatureSwitch('parking', 'Avto dayanacaq', property.hasParking, 'hasParking')}
-        {renderFeatureSwitch('swimming-pool', 'Hovuz', property.hasPool, 'hasPool')}
-        {renderFeatureSwitch('child', 'Uşaq otağı', property.hasKidsRoom, 'hasKidsRoom')}
-        {renderFeatureSwitch('tree', 'Qış bağı', property.hasWinterGarden, 'hasWinterGarden')}
-        {renderFeatureSwitch('water', 'Bio hovuz', property.hasBioPool, 'hasBioPool')}
-        {renderFeatureSwitch('futbol', 'Futbol meydançası', property.hasFootballField, 'hasFootballField')}
-        {renderFeatureSwitch('basketball-ball', 'Basketbol meydançası', property.hasBasketballCourt, 'hasBasketballCourt')}
-        {renderFeatureSwitch('table-tennis', 'Tennis kortu', property.hasTennisCourt, 'hasTennisCourt')}
-        {renderFeatureSwitch('dumbbell', 'Trenajor zalı', property.hasGym, 'hasGym')}
-        {renderFeatureSwitch('hot-tub', 'Sauna', property.hasSauna, 'hasSauna')}
-        {renderFeatureSwitch('bath', 'Jakuzi', property.hasJacuzzi, 'hasJacuzzi')}
-        {renderFeatureSwitch('wine-bottle', 'Şərab zirzəmisi', property.hasWineCellar, 'hasWineCellar')}
+        {renderFeatureSwitch('parking', i18n.t('propertyForm.parking'), property.hasParking, 'hasParking')}
+        {renderFeatureSwitch('swimming-pool', i18n.t('propertyForm.pool'), property.hasPool, 'hasPool')}
+        {renderFeatureSwitch('child', i18n.t('propertyForm.kidsRoom'), property.hasKidsRoom, 'hasKidsRoom')}
+        {renderFeatureSwitch('tree', i18n.t('propertyForm.winterGarden'), property.hasWinterGarden, 'hasWinterGarden')}
+        {renderFeatureSwitch('water', i18n.t('propertyForm.bioPool'), property.hasBioPool, 'hasBioPool')}
+        {renderFeatureSwitch('futbol', i18n.t('propertyForm.footballField'), property.hasFootballField, 'hasFootballField')}
+        {renderFeatureSwitch('basketball-ball', i18n.t('propertyForm.basketballCourt'), property.hasBasketballCourt, 'hasBasketballCourt')}
+        {renderFeatureSwitch('table-tennis', i18n.t('propertyForm.tennisCourt'), property.hasTennisCourt, 'hasTennisCourt')}
+        {renderFeatureSwitch('dumbbell', i18n.t('propertyForm.gym'), property.hasGym, 'hasGym')}
+        {renderFeatureSwitch('hot-tub', i18n.t('propertyForm.sauna'), property.hasSauna, 'hasSauna')}
+        {renderFeatureSwitch('bath', i18n.t('propertyForm.jacuzzi'), property.hasJacuzzi, 'hasJacuzzi')}
+        {renderFeatureSwitch('wine-bottle', i18n.t('propertyForm.wineCellar'), property.hasWineCellar, 'hasWineCellar')}
 
         <View style={styles.mediaSection}>
-          <Text style={styles.sectionTitle}>Şəkil və video</Text>
-          <Text style={styles.mediaNote}>* Minimum bir şəkil əlavə etmək vacibdir</Text>
+          <Text style={styles.sectionTitle}>{i18n.t('propertyForm.media')}</Text>
+          <Text style={styles.mediaNote}>{i18n.t('propertyForm.minImageRequired')}</Text>
           
           <View style={styles.mediaButtons}>
             <TouchableOpacity style={styles.mediaButton} onPress={pickImage}>
@@ -296,7 +299,7 @@ const PropertyFormScreen = ({ navigation }) => {
                 style={styles.mediaButtonGradient}
               >
                 <MaterialIcons name="photo-camera" size={24} color="white" />
-                <Text style={styles.mediaButtonText}>Şəkil *</Text>
+                <Text style={styles.mediaButtonText}>{i18n.t('propertyForm.photo')} *</Text>
               </LinearGradient>
             </TouchableOpacity>
             
@@ -308,7 +311,7 @@ const PropertyFormScreen = ({ navigation }) => {
                 style={styles.mediaButtonGradient}
               >
                 <MaterialIcons name="videocam" size={24} color="white" />
-                <Text style={styles.mediaButtonText}>Video</Text>
+                <Text style={styles.mediaButtonText}>{i18n.t('propertyForm.video')}</Text>
               </LinearGradient>
             </TouchableOpacity>
           </View>
@@ -347,7 +350,7 @@ const PropertyFormScreen = ({ navigation }) => {
             style={styles.submitButtonGradient}
           >
             <MaterialIcons name="save" size={24} color="white" style={styles.submitButtonIcon} />
-            <Text style={styles.submitButtonText}>Yadda saxla</Text>
+            <Text style={styles.submitButtonText}>{i18n.t('propertyForm.save')}</Text>
           </LinearGradient>
         </TouchableOpacity>
 
@@ -359,7 +362,7 @@ const PropertyFormScreen = ({ navigation }) => {
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
               <View style={styles.modalHeader}>
-                <Text style={styles.modalTitle}>Ölkə kodu seçin</Text>
+                <Text style={styles.modalTitle}>{i18n.t('propertyForm.selectCountryCode')}</Text>
                 <TouchableOpacity onPress={() => setShowCountryPicker(false)}>
                   <MaterialIcons name="close" size={24} color="#666" />
                 </TouchableOpacity>

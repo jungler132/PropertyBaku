@@ -3,12 +3,15 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, Dimensions }
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useProperty } from '../context/PropertyContext';
+import i18n from '../translations/i18n';
+import { useLanguage } from '../translations/i18n';
 
 const { width } = Dimensions.get('window');
 const ITEM_WIDTH = (width - 60) / 2;
 
 const PropertyListScreen = ({ navigation }) => {
   const { properties } = useProperty();
+  const { currentLocale } = useLanguage();
 
   const renderPropertyItem = ({ item }) => (
     <TouchableOpacity
@@ -16,24 +19,16 @@ const PropertyListScreen = ({ navigation }) => {
       onPress={() => navigation.navigate('PropertyDetails', { property: item })}
     >
       <Image 
-        source={{ uri: item.mediaFiles?.[0]?.uri || 'https://picsum.photos/300/300' }} 
+        source={{ uri: item.mediaFiles?.[0]?.uri || 'https://picsum.photos/800/600' }} 
         style={styles.propertyImage} 
       />
-      <View style={styles.propertyInfo}>
-        <Text style={styles.propertyType}>{item.type}</Text>
-        <Text style={styles.propertyArea}>{item.area} m²</Text>
-        <Text style={styles.propertyPrice}>${item.price}</Text>
-        <View style={styles.propertyDetails}>
-          <View style={styles.detailItem}>
-            <MaterialIcons name="bed" size={16} color="#4CAF50" />
-            <Text style={styles.detailText}>{item.bedrooms}</Text>
-          </View>
-          <View style={styles.detailItem}>
-            <MaterialIcons name="bathroom" size={16} color="#4CAF50" />
-            <Text style={styles.detailText}>{item.bathrooms}</Text>
-          </View>
-        </View>
-      </View>
+      <LinearGradient
+        colors={['transparent', 'rgba(0,0,0,0.7)']}
+        style={styles.gradient}
+      >
+        <Text style={styles.propertyType}>{i18n.t(`propertyTypes.${item.type}`)}</Text>
+        <Text style={styles.propertyArea}>{item.area} {i18n.t('common.squareMeters')}</Text>
+      </LinearGradient>
     </TouchableOpacity>
   );
 
@@ -45,14 +40,14 @@ const PropertyListScreen = ({ navigation }) => {
         end={{ x: 1, y: 1 }}
         style={styles.header}
       >
-        <Text style={styles.headerTitle}>Əmlaklarım</Text>
+        <Text style={styles.headerTitle}>{i18n.t('home.myProperties')}</Text>
       </LinearGradient>
 
       {properties.length === 0 ? (
         <View style={styles.emptyContainer}>
-          <MaterialIcons name="home" size={64} color="#666" />
-          <Text style={styles.emptyText}>Hələ ki, əmlak əlavə edilməyib</Text>
-          <Text style={styles.emptySubtext}>Əmlak əlavə etmək üçün + düyməsindən istifadə edin</Text>
+          <MaterialIcons name="home" size={80} color="#ccc" />
+          <Text style={styles.emptyText}>{i18n.t('home.noProperties')}</Text>
+          <Text style={styles.emptySubtext}>{i18n.t('home.addPropertyHint')}</Text>
         </View>
       ) : (
         <FlatList
@@ -167,6 +162,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlign: 'center',
     fontFamily: 'Nunito_400Regular',
+  },
+  gradient: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    padding: 10,
   },
 });
 
