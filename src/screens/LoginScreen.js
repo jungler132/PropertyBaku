@@ -1,65 +1,70 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const LoginScreen = ({ navigation }) => {
-  const [login, setLogin] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(false);
+  const [error, setError] = useState('');
 
   const handleLogin = () => {
-    if (login === 'admin' && password === 'admin') {
-      setError(false);
+    if (username === 'admin' && password === 'admin') {
       navigation.navigate('PropertyForm');
     } else {
-      setError(true);
+      setError('Yanlış istifadəçi adı və ya şifrə');
     }
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.formContainer}>
-        <MaterialIcons name="apartment" size={80} color="#4CAF50" />
-        <Text style={styles.title}>BakuRentProperty</Text>
-        
-        <View style={[styles.inputContainer, error && styles.inputError]}>
-          <MaterialIcons name="person" size={24} color={error ? "#FF0000" : "#4CAF50"} style={styles.icon} />
-          <TextInput
-            style={styles.input}
-            placeholder="İstifadəçi adı"
-            value={login}
-            onChangeText={(text) => {
-              setLogin(text);
-              setError(false);
-            }}
-            placeholderTextColor="#666"
-          />
+      <LinearGradient
+        colors={['#4CAF50', '#2196F3']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.gradient}
+      >
+        <View style={styles.content}>
+          <MaterialIcons name="home" size={80} color="white" />
+          <Text style={styles.title}>PropertyBaku</Text>
+
+          <View style={styles.inputContainer}>
+            <MaterialIcons name="person" size={24} color="#4CAF50" style={styles.icon} />
+            <TextInput
+              style={styles.input}
+              placeholder="İstifadəçi adı"
+              value={username}
+              onChangeText={setUsername}
+              placeholderTextColor="#666"
+            />
+          </View>
+
+          <View style={styles.inputContainer}>
+            <MaterialIcons name="lock" size={24} color="#4CAF50" style={styles.icon} />
+            <TextInput
+              style={styles.input}
+              placeholder="Şifrə"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              placeholderTextColor="#666"
+            />
+          </View>
+
+          {error ? <Text style={styles.errorText}>{error}</Text> : null}
+
+          <TouchableOpacity style={styles.button} onPress={handleLogin}>
+            <LinearGradient
+              colors={['#4CAF50', '#2196F3']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.buttonGradient}
+            >
+              <Text style={styles.buttonText}>Daxil ol</Text>
+            </LinearGradient>
+          </TouchableOpacity>
         </View>
-
-        <View style={[styles.inputContainer, error && styles.inputError]}>
-          <MaterialIcons name="lock" size={24} color={error ? "#FF0000" : "#4CAF50"} style={styles.icon} />
-          <TextInput
-            style={styles.input}
-            placeholder="Şifrə"
-            value={password}
-            onChangeText={(text) => {
-              setPassword(text);
-              setError(false);
-            }}
-            secureTextEntry
-            placeholderTextColor="#666"
-          />
-        </View>
-
-        {error && (
-          <Text style={styles.errorText}>Yenidən cəhd edin</Text>
-        )}
-
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <MaterialIcons name="login" size={24} color="white" style={styles.buttonIcon} />
-          <Text style={styles.buttonText}>Daxil ol</Text>
-        </TouchableOpacity>
-      </View>
+      </LinearGradient>
     </View>
   );
 };
@@ -67,77 +72,80 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  gradient: {
+    flex: 1,
+  },
+  content: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#E3F2FD',
-  },
-  formContainer: {
-    width: '80%',
     padding: 20,
-    borderRadius: 15,
-    backgroundColor: 'white',
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: 'white',
+    marginBottom: 30,
+    fontFamily: 'Nunito_700Bold',
+  },
+  inputContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: 'white',
+    borderRadius: 15,
+    paddingHorizontal: 15,
+    marginBottom: 15,
+    width: '100%',
+    height: 60,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.1,
     shadowRadius: 3.84,
     elevation: 5,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#2196F3',
-    marginBottom: 30,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '100%',
-    marginBottom: 15,
-    borderWidth: 1,
-    borderColor: '#4CAF50',
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    backgroundColor: '#F5F5F5',
-  },
-  inputError: {
-    borderColor: '#FF0000',
   },
   icon: {
     marginRight: 10,
   },
   input: {
     flex: 1,
-    height: 50,
     fontSize: 16,
     color: '#333',
+    fontFamily: 'Nunito_400Regular',
   },
   button: {
-    backgroundColor: '#4CAF50',
-    padding: 15,
-    borderRadius: 10,
     width: '100%',
-    alignItems: 'center',
+    borderRadius: 15,
+    overflow: 'hidden',
     marginTop: 20,
-    flexDirection: 'row',
-    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
-  buttonIcon: {
-    marginRight: 10,
+  buttonGradient: {
+    padding: 15,
+    alignItems: 'center',
   },
   buttonText: {
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
+    fontFamily: 'Nunito_700Bold',
   },
   errorText: {
-    color: '#FF0000',
+    color: '#FF3B30',
     fontSize: 14,
-    marginBottom: 10,
+    marginTop: 5,
     textAlign: 'center',
+    fontFamily: 'Nunito_400Regular',
   },
 });
 

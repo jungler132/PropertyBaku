@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "PropertyBakuApp",
-    "slug": "PropertyBakuApp",
+    "name": "PropertyBaku",
+    "slug": "PropertyBaku",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,10 +17,10 @@
     ],
     "ios": {
       "supportsTablet": true,
+      "bundleIdentifier": "com.propertybaku.app",
       "infoPlist": {
-        "NSPhotoLibraryUsageDescription": "Allow $(PRODUCT_NAME) to access your photos",
-        "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access your camera",
-        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
+        "NSPhotoLibraryUsageDescription": "Əmlak şəkillərini seçmək üçün foto kitabxanaya giriş lazımdır",
+        "NSCameraUsageDescription": "Əmlak şəkillərini çəkmək üçün kameraya giriş lazımdır"
       }
     },
     "android": {
@@ -28,11 +28,11 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "package": "com.propertybaku.app",
       "permissions": [
-        "android.permission.CAMERA",
-        "android.permission.READ_EXTERNAL_STORAGE",
-        "android.permission.WRITE_EXTERNAL_STORAGE",
-        "android.permission.RECORD_AUDIO"
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
       ]
     },
     "web": {
@@ -42,8 +42,8 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "The app needs access to your photos to let you share them with your listing.",
-          "cameraPermission": "The app needs access to your camera to let you take photos for your listing."
+          "photosPermission": "Əmlak şəkillərini seçmək üçün foto kitabxanaya giriş lazımdır",
+          "cameraPermission": "Əmlak şəkillərini çəkmək üçün kameraya giriş lazımdır"
         }
       ]
     ]

@@ -1,28 +1,25 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Animated, Image } from 'react-native';
+import { View, Text, StyleSheet, Animated } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const SuccessScreen = ({ navigation, route }) => {
-  const scaleValue = new Animated.Value(0);
-  const fadeValue = new Animated.Value(0);
+  const scaleAnim = new Animated.Value(0);
+  const opacityAnim = new Animated.Value(0);
 
   useEffect(() => {
-    Animated.sequence([
-      Animated.spring(scaleValue, {
+    Animated.parallel([
+      Animated.spring(scaleAnim, {
         toValue: 1,
-        tension: 10,
-        friction: 2,
         useNativeDriver: true,
       }),
-      Animated.timing(fadeValue, {
+      Animated.timing(opacityAnim, {
         toValue: 1,
-        duration: 1000,
+        duration: 500,
         useNativeDriver: true,
       }),
     ]).start();
 
-    // Автоматически переходим на экран с деталями через 3 секунды
     const timer = setTimeout(() => {
       navigation.replace('PropertySummary', route.params);
     }, 3000);
@@ -31,90 +28,58 @@ const SuccessScreen = ({ navigation, route }) => {
   }, []);
 
   return (
-    <LinearGradient
-      colors={['#4CAF50', '#2196F3']}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={styles.container}
-    >
-      <Animated.View
-        style={[
-          styles.content,
-          {
-            transform: [{ scale: scaleValue }],
-          },
-        ]}
+    <View style={styles.container}>
+      <LinearGradient
+        colors={['#4CAF50', '#2196F3']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.gradient}
       >
-        <View style={styles.iconContainer}>
-          <MaterialIcons name="check-circle" size={100} color="#fff" />
-        </View>
-
         <Animated.View
           style={[
-            styles.textContainer,
+            styles.content,
             {
-              opacity: fadeValue,
+              transform: [{ scale: scaleAnim }],
+              opacity: opacityAnim,
             },
           ]}
         >
-          <Text style={styles.title}>Təbrik edirik!</Text>
-          <Text style={styles.message}>
-            Elanınız uğurla əlavə edildi
-          </Text>
-          <Text style={styles.submessage}>
-            Əmlak məlumatlarınız sistemə əlavə olundu
-          </Text>
+          <MaterialIcons name="check-circle" size={100} color="white" />
+          <Text style={styles.title}>Təbriklər!</Text>
+          <Text style={styles.subtitle}>Əmlak uğurla əlavə edildi</Text>
         </Animated.View>
-      </Animated.View>
-    </LinearGradient>
+      </LinearGradient>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  },
+  gradient: {
+    flex: 1,
   },
   content: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-  },
-  iconContainer: {
-    marginBottom: 30,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 75,
-    padding: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4.65,
-    elevation: 8,
-  },
-  textContainer: {
-    alignItems: 'center',
   },
   title: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 15,
+    color: '#4CAF50',
+    marginTop: 20,
     textAlign: 'center',
+    fontFamily: 'Nunito_700Bold',
   },
-  message: {
-    fontSize: 24,
-    color: '#fff',
-    marginBottom: 10,
-    textAlign: 'center',
-  },
-  submessage: {
+  subtitle: {
     fontSize: 18,
-    color: '#fff',
+    color: '#666',
+    marginTop: 10,
     textAlign: 'center',
-    opacity: 0.9,
+    fontFamily: 'Nunito_400Regular',
   },
 });
 

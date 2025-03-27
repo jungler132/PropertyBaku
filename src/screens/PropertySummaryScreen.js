@@ -1,11 +1,23 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, Dimensions } from 'react-native';
 import { Video } from 'expo-av';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useFonts } from 'expo-font';
 
 const PropertySummaryScreen = ({ route, navigation }) => {
   const { property, mediaFiles } = route.params;
+
+  const renderFeatureRow = (icon, label, value, isRequired = false) => {
+    if (!value && !isRequired) return null;
+    return (
+      <View style={styles.infoRow}>
+        <FontAwesome5 name={icon} size={24} color="#4CAF50" />
+        <Text style={styles.infoLabel}>{label}:</Text>
+        <Text style={styles.infoValue}>{value ? 'Var' : 'Yox'}</Text>
+      </View>
+    );
+  };
 
   const renderMediaItem = (item, index) => {
     if (item.type === 'image') {
@@ -42,6 +54,24 @@ const PropertySummaryScreen = ({ route, navigation }) => {
 
       <View style={styles.content}>
         <View style={styles.infoSection}>
+          <Text style={styles.sectionTitle}>Sahibkar məlumatları</Text>
+
+          <View style={styles.infoRow}>
+            <MaterialIcons name="person" size={24} color="#4CAF50" />
+            <Text style={styles.infoLabel}>Sahibkar:</Text>
+            <Text style={styles.infoValue}>{property.owner}</Text>
+          </View>
+
+          <View style={styles.infoRow}>
+            <MaterialIcons name="phone" size={24} color="#4CAF50" />
+            <Text style={styles.infoLabel}>Telefon:</Text>
+            <Text style={styles.infoValue}>{property.phoneCode}{property.phoneNumber}</Text>
+          </View>
+        </View>
+
+        <View style={styles.infoSection}>
+          <Text style={styles.sectionTitle}>Əsas məlumatlar</Text>
+
           <View style={styles.infoRow}>
             <MaterialIcons name="home" size={24} color="#4CAF50" />
             <Text style={styles.infoLabel}>Ev növü:</Text>
@@ -73,40 +103,37 @@ const PropertySummaryScreen = ({ route, navigation }) => {
           </View>
 
           <View style={styles.infoRow}>
-            <MaterialIcons name="local-parking" size={24} color="#4CAF50" />
-            <Text style={styles.infoLabel}>Avto dayanacaq:</Text>
-            <Text style={styles.infoValue}>{property.hasParking ? 'Var' : 'Yox'}</Text>
-          </View>
-
-          <View style={styles.infoRow}>
             <MaterialIcons name="garage" size={24} color="#4CAF50" />
             <Text style={styles.infoLabel}>Qaraj:</Text>
             <Text style={styles.infoValue}>{property.hasGarage ? 'Var' : 'Yox'}</Text>
           </View>
         </View>
 
+        <View style={styles.infoSection}>
+          <Text style={styles.sectionTitle}>Əlavə imkanlar</Text>
+
+          {renderFeatureRow('parking', 'Avto dayanacaq', property.hasParking)}
+          {renderFeatureRow('swimming-pool', 'Hovuz', property.hasPool)}
+          {renderFeatureRow('child', 'Uşaq otağı', property.hasKidsRoom)}
+          {renderFeatureRow('tree', 'Qış bağı', property.hasWinterGarden)}
+          {renderFeatureRow('water', 'Bio hovuz', property.hasBioPool)}
+          {renderFeatureRow('futbol', 'Futbol meydançası', property.hasFootballField)}
+          {renderFeatureRow('basketball-ball', 'Basketbol meydançası', property.hasBasketballCourt)}
+          {renderFeatureRow('table-tennis', 'Tennis kortu', property.hasTennisCourt)}
+          {renderFeatureRow('dumbbell', 'Trenajor zalı', property.hasGym)}
+          {renderFeatureRow('hot-tub', 'Sauna', property.hasSauna)}
+          {renderFeatureRow('bath', 'Jakuzi', property.hasJacuzzi)}
+          {renderFeatureRow('wine-bottle', 'Şərab zirzəmisi', property.hasWineCellar)}
+        </View>
+
         {mediaFiles.length > 0 && (
           <View style={styles.mediaSection}>
-            <Text style={styles.mediaSectionTitle}>Şəkillər və Videolar</Text>
+            <Text style={styles.sectionTitle}>Şəkillər və Videolar</Text>
             <View style={styles.mediaGrid}>
               {mediaFiles.map((item, index) => renderMediaItem(item, index))}
             </View>
           </View>
         )}
-
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate('PropertyForm')}
-        >
-          <LinearGradient
-            colors={['#4CAF50', '#2196F3']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.buttonGradient}
-          >
-            <Text style={styles.buttonText}>Yeni Əmlak Əlavə Et</Text>
-          </LinearGradient>
-        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -125,15 +152,24 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
+    marginBottom: 20,
   },
   headerTitle: {
     fontSize: 24,
     fontWeight: 'bold',
     color: 'white',
     textAlign: 'center',
+    fontFamily: 'Nunito_700Bold',
   },
   content: {
     padding: 20,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 20,
+    fontFamily: 'Nunito_700Bold',
   },
   infoSection: {
     backgroundColor: 'white',
@@ -145,7 +181,7 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.1,
     shadowRadius: 3.84,
     elevation: 5,
   },
@@ -162,6 +198,7 @@ const styles = StyleSheet.create({
     color: '#333',
     marginLeft: 10,
     flex: 1,
+    fontFamily: 'Nunito_400Regular',
   },
   infoValue: {
     fontSize: 16,
@@ -169,15 +206,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     flex: 1,
     textAlign: 'right',
+    fontFamily: 'Nunito_700Bold',
   },
   mediaSection: {
     marginBottom: 20,
-  },
-  mediaSectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 15,
   },
   mediaGrid: {
     flexDirection: 'row',
@@ -187,7 +219,7 @@ const styles = StyleSheet.create({
   mediaItem: {
     width: mediaItemSize,
     height: mediaItemSize,
-    marginBottom: 10,
+    marginBottom: 15,
     borderRadius: 15,
     overflow: 'hidden',
     backgroundColor: '#E0E0E0',
@@ -196,35 +228,13 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.1,
     shadowRadius: 3.84,
     elevation: 5,
   },
   mediaPreview: {
     width: '100%',
     height: '100%',
-  },
-  button: {
-    marginVertical: 20,
-    borderRadius: 10,
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  buttonGradient: {
-    padding: 15,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
   },
 });
 
