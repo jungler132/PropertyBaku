@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useFonts, Nunito_400Regular, Nunito_700Bold } from '@expo-google-fonts/nunito';
 import * as SplashScreen from 'expo-splash-screen';
 import { MaterialIcons } from '@expo/vector-icons';
+import { View, Text, ActivityIndicator } from 'react-native';
 import { PropertyProvider } from './src/context/PropertyContext';
 import LoginScreen from './src/screens/LoginScreen';
 import PropertyFormScreen from './src/screens/PropertyFormScreen';
@@ -59,11 +60,22 @@ const TabNavigator = () => {
   );
 };
 
+const LoadingScreen = () => (
+  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
+    <ActivityIndicator size="large" color="#4CAF50" />
+    <Text style={{ marginTop: 20, color: '#666', fontFamily: 'Nunito_400Regular' }}>
+      Yüklənir...
+    </Text>
+  </View>
+);
+
 export default function App() {
   const [fontsLoaded] = useFonts({
     Nunito_400Regular,
     Nunito_700Bold,
   });
+  const [isReady, setIsReady] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function prepare() {
@@ -71,16 +83,28 @@ export default function App() {
         await SplashScreen.preventAutoHideAsync();
         if (fontsLoaded) {
           await SplashScreen.hideAsync();
+          setIsReady(true);
         }
       } catch (e) {
         console.warn(e);
+        setError(e.message);
       }
     }
     prepare();
   }, [fontsLoaded]);
 
-  if (!fontsLoaded) {
-    return null;
+  if (error) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
+        <Text style={{ color: '#FF3B30', fontFamily: 'Nunito_400Regular', textAlign: 'center', padding: 20 }}>
+          Xəta baş verdi. Zəhmət olmasa tətbiqi yenidən başladın.
+        </Text>
+      </View>
+    );
+  }
+
+  if (!isReady) {
+    return <LoadingScreen />;
   }
 
   return (
