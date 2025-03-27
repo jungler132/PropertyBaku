@@ -6,6 +6,7 @@ import * as MediaLibrary from 'expo-media-library';
 import { Video } from 'expo-av';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
+import { useProperty } from '../context/PropertyContext';
 
 const COUNTRY_CODES = [
   { code: '+994', country: 'AZ' },
@@ -21,6 +22,7 @@ const COUNTRY_CODES = [
 ];
 
 const PropertyFormScreen = ({ navigation }) => {
+  const { addProperty } = useProperty();
   const [property, setProperty] = useState({
     owner: '',
     phoneCode: '+994',
@@ -118,13 +120,18 @@ const PropertyFormScreen = ({ navigation }) => {
     return true;
   };
 
-  const handleSubmit = () => {
-    if (!validateForm()) return;
-    
-    navigation.navigate('Success', {
-      property,
-      mediaFiles,
-    });
+  const handleSubmit = async () => {
+    if (validateForm()) {
+      const propertyData = {
+        ...property,
+        mediaFiles,
+        ownerName: property.owner,
+        ownerPhone: `${property.phoneCode}${property.phoneNumber}`,
+      };
+      
+      addProperty(propertyData);
+      navigation.navigate('Success', { property: propertyData, mediaFiles });
+    }
   };
 
   const renderFeatureSwitch = (icon, label, value, field) => (

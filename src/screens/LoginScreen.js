@@ -10,7 +10,7 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLogin = () => {
     if (username === 'admin' && password === 'admin') {
-      navigation.navigate('PropertyForm');
+      navigation.replace('MainTabs');
     } else {
       setError('Yanlış istifadəçi adı və ya şifrə');
     }
