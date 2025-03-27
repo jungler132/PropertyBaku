@@ -8,21 +8,42 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Bu tətbiq şəkil və video seçmək üçün qalereyanıza daxil olmaq istəyir",
+        "NSCameraUsageDescription": "Bu tətbiq şəkil və video çəkmək üçün kameranıza daxil olmaq istəyir"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Bu tətbiq şəkil və video seçmək üçün qalereyanıza daxil olmaq istəyir",
+          "cameraPermission": "Bu tətbiq şəkil və video çəkmək üçün kameranıza daxil olmaq istəyir"
+        }
+      ]
+    ]
   }
 }
