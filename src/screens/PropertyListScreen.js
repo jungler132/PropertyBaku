@@ -26,7 +26,7 @@ const PropertyListScreen = ({ navigation }) => {
       activeOpacity={0.95}
     >
       <Image
-        source={{ uri: item.images[0] }}
+        source={item.images && item.images.length > 0 ? { uri: item.images[0].uri } : require('../../assets/logo.png')}
         style={styles.cardImage}
         resizeMode="cover"
       />
@@ -37,7 +37,7 @@ const PropertyListScreen = ({ navigation }) => {
         <View style={styles.cardContent}>
           <View style={styles.cardHeader}>
             <Text style={styles.propertyType}>
-              {i18n.t(`propertyTypes.${item.type}`)}
+              {item.type}
             </Text>
             <View style={styles.priceContainer}>
               <MaterialIcons name="attach-money" size={18} color="#F9F9FF" />

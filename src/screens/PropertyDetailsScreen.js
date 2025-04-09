@@ -42,19 +42,37 @@ const PropertyDetailsScreen = ({ route, navigation }) => {
           colors={['transparent', 'rgba(0,0,0,0.7)']}
           style={styles.imageGradient}
         >
-          <Text style={styles.imageTitle}>{i18n.t(`propertyTypes.${property.type}`)}</Text>
+          <Text style={styles.imageTitle}>{property.type}</Text>
           <Text style={styles.imageSubtitle}>{property.location}</Text>
         </LinearGradient>
       </View>
 
       <View style={styles.content}>
         <View style={styles.priceContainer}>
-          <Text style={styles.price}>${property.price}</Text>
+          <Text style={styles.price}>{property.price}</Text>
           <Text style={styles.area}>{property.area} {i18n.t('common.squareMeters')}</Text>
         </View>
 
         <View style={styles.infoSection}>
           <Text style={styles.sectionTitle}>{i18n.t('propertyDetails.mainInfo')}</Text>
+
+          <View style={styles.infoRow}>
+            <MaterialIcons name="location-city" size={24} color="#4CAF50" />
+            <Text style={styles.infoLabel}>{i18n.t('propertyForm.city')}:</Text>
+            <Text style={styles.infoValue}>{property.city}</Text>
+          </View>
+
+          <View style={styles.infoRow}>
+            <MaterialIcons name="map" size={24} color="#4CAF50" />
+            <Text style={styles.infoLabel}>{i18n.t('propertyForm.region')}:</Text>
+            <Text style={styles.infoValue}>{property.region}</Text>
+          </View>
+
+          <View style={styles.infoRow}>
+            <MaterialIcons name="home" size={24} color="#4CAF50" />
+            <Text style={styles.infoLabel}>{i18n.t('propertyForm.address')}:</Text>
+            <Text style={styles.infoValue}>{property.address}</Text>
+          </View>
 
           <View style={styles.infoRow}>
             <MaterialIcons name="bed" size={24} color="#4CAF50" />
@@ -202,6 +220,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#4CAF50',
     fontFamily: 'Nunito_700Bold',
+    alignSelf:'center'
   },
   area: {
     fontSize: 18,

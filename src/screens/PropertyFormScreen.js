@@ -35,6 +35,9 @@ const PropertyFormScreen = ({ navigation }) => {
     landArea: '',
     bedrooms: '',
     bathrooms: '',
+    city: '',
+    region: '',
+    address: '',
     hasGarage: false,
     hasParking: false,
     hasPool: false,
@@ -116,7 +119,10 @@ const PropertyFormScreen = ({ navigation }) => {
   };
 
   const validateForm = () => {
-    if (!property.owner || !property.phoneNumber || !property.type || !property.area || !property.landArea || !property.bedrooms || !property.bathrooms || !property.hasGarage || mediaFiles.length === 0) {
+    if (!property.owner || !property.phoneNumber || !property.type || 
+        !property.area || !property.landArea || !property.bedrooms || 
+        !property.bathrooms || !property.city || !property.region || 
+        !property.address || mediaFiles.length === 0) {
       Alert.alert(i18n.t('alerts.error'), i18n.t('alerts.fillRequiredFields'));
       return false;
     }
@@ -258,22 +264,43 @@ const PropertyFormScreen = ({ navigation }) => {
           />
         </View>
 
-        <View style={[styles.switchContainer, styles.requiredSwitch]}>
-          <View style={styles.switchLabelContainer}>
-            <MaterialIcons name="garage" size={24} color="#363237" style={styles.switchIcon} />
-            <Text style={styles.switchLabel}>{i18n.t('propertyForm.garage')} *</Text>
-          </View>
-          <Switch
-            value={property.hasGarage}
-            onValueChange={(value) => setProperty({ ...property, hasGarage: value })}
-            trackColor={{ false: '#73605B', true: '#D09683' }}
-            thumbColor={property.hasGarage ? '#363237' : '#F9F9FF'}
+        <View style={styles.inputContainer}>
+          <MaterialIcons name="location-city" size={24} color="#363237" style={styles.icon} />
+          <TextInput
+            style={styles.input}
+            placeholder={i18n.t('propertyForm.city') + ' *'}
+            value={property.city}
+            onChangeText={(text) => setProperty({ ...property, city: text })}
+            placeholderTextColor="#73605B"
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <MaterialIcons name="map" size={24} color="#363237" style={styles.icon} />
+          <TextInput
+            style={styles.input}
+            placeholder={i18n.t('propertyForm.region') + ' *'}
+            value={property.region}
+            onChangeText={(text) => setProperty({ ...property, region: text })}
+            placeholderTextColor="#73605B"
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <MaterialIcons name="home" size={24} color="#363237" style={styles.icon} />
+          <TextInput
+            style={styles.input}
+            placeholder={i18n.t('propertyForm.address') + ' *'}
+            value={property.address}
+            onChangeText={(text) => setProperty({ ...property, address: text })}
+            placeholderTextColor="#73605B"
           />
         </View>
 
         <Text style={styles.sectionTitle}>{i18n.t('propertyForm.additionalFeatures')}</Text>
 
-        {renderFeatureSwitch('parking', i18n.t('propertyForm.parking'), property.hasParking, 'hasParking')}
+        {renderFeatureSwitch('car', i18n.t('propertyForm.parking'), property.hasParking, 'hasParking')}
+        {renderFeatureSwitch('warehouse', i18n.t('propertyForm.garage'), property.hasGarage, 'hasGarage')}
         {renderFeatureSwitch('swimming-pool', i18n.t('propertyForm.pool'), property.hasPool, 'hasPool')}
         {renderFeatureSwitch('child', i18n.t('propertyForm.kidsRoom'), property.hasKidsRoom, 'hasKidsRoom')}
         {renderFeatureSwitch('tree', i18n.t('propertyForm.winterGarden'), property.hasWinterGarden, 'hasWinterGarden')}
@@ -454,10 +481,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     borderColor: '#73605B',
-  },
-  requiredSwitch: {
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
   },
   switchLabelContainer: {
     flexDirection: 'row',

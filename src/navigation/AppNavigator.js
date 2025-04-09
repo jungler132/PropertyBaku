@@ -7,6 +7,7 @@ import PropertyFormScreen from '../screens/PropertyFormScreen';
 import PropertySummaryScreen from '../screens/PropertySummaryScreen';
 import SuccessScreen from '../screens/SuccessScreen';
 import { LinearGradient } from 'expo-linear-gradient';
+import i18n from '../translations/i18n';
 
 const Stack = createStackNavigator();
 
@@ -36,14 +37,14 @@ const AppNavigator = () => {
           name="Login"
           component={LoginScreen}
           options={{
-            title: 'Giriş',
+            title: i18n.t('navigation.login'),
           }}
         />
         <Stack.Screen
           name="PropertyForm"
           component={PropertyFormScreen}
           options={{
-            title: 'Əmlak əlavə et',
+            title: i18n.t('navigation.addProperty'),
           }}
         />
         <Stack.Screen
@@ -57,7 +58,7 @@ const AppNavigator = () => {
           name="PropertySummary"
           component={PropertySummaryScreen}
           options={{
-            title: 'Əmlak Məlumatları',
+            title: i18n.t('navigation.propertyDetails'),
           }}
         />
       </Stack.Navigator>
