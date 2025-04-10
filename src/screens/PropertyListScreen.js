@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -17,57 +18,103 @@ const { width } = Dimensions.get('window');
 const CARD_WIDTH = width * 0.9;
 
 const PropertyListScreen = ({ navigation }) => {
-  const { properties } = useProperty();
+  const { properties, loading, error, refreshProperties } = useProperty();
 
-  const renderPropertyCard = ({ item }) => (
-    <TouchableOpacity
-      style={styles.card}
-      onPress={() => navigation.navigate('PropertyDetails', { property: item })}
-      activeOpacity={0.95}
-    >
-      <Image
-        source={item.images && item.images.length > 0 ? { uri: item.images[0].uri } : require('../../assets/logo.png')}
-        style={styles.cardImage}
-        resizeMode="cover"
-      />
-      <LinearGradient
-        colors={['transparent', 'rgba(54, 50, 55, 0.9)']}
-        style={styles.cardOverlay}
+  useEffect(() => {
+    console.log('PropertyListScreen - Current properties:', properties);
+    console.log('PropertyListScreen - Loading state:', loading);
+    if (error) {
+      console.log('PropertyListScreen - Error state:', error);
+    }
+  }, [properties, loading, error]);
+
+  if (loading) {
+    console.log('PropertyListScreen - Rendering loading state');
+    return (
+      <View style={[styles.container, styles.centerContent]}>
+        <ActivityIndicator size="large" color="#D09683" />
+      </View>
+    );
+  }
+
+  if (error) {
+    console.log('PropertyListScreen - Rendering error state:', error);
+    return (
+      <View style={[styles.container, styles.centerContent]}>
+        <Text style={styles.errorText}>{error}</Text>
+        <TouchableOpacity 
+          style={styles.retryButton} 
+          onPress={() => {
+            console.log('PropertyListScreen - Retrying fetch');
+            refreshProperties();
+          }}
+        >
+          <Text style={styles.retryButtonText}>Повторить</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  const renderPropertyCard = ({ item }) => {
+    console.log('Rendering card for item:', item);
+    
+    let imageSource = require('../../assets/logo.png');
+    if (item.mediaFiles && item.mediaFiles.length > 0 && typeof item.mediaFiles[0] === 'string') {
+      imageSource = { uri: item.mediaFiles[0] };
+    }
+    
+    return (
+      <TouchableOpacity
+        style={styles.card}
+        onPress={() => navigation.navigate('PropertyDetails', { property: item })}
+        activeOpacity={0.95}
       >
-        <View style={styles.cardContent}>
-          <View style={styles.cardHeader}>
-            <Text style={styles.propertyType}>
-              {item.type}
-            </Text>
-            <View style={styles.priceContainer}>
-              <MaterialIcons name="attach-money" size={18} color="#F9F9FF" />
-              <Text style={styles.price}>{item.price}</Text>
+        <Image
+          source={imageSource}
+          style={styles.cardImage}
+          resizeMode="cover"
+        />
+        <LinearGradient
+          colors={['transparent', 'rgba(54, 50, 55, 0.9)']}
+          style={styles.cardOverlay}
+        >
+          <View style={styles.cardContent}>
+            <View style={styles.cardHeader}>
+              <Text style={styles.propertyType}>
+                {item.type || 'Не указан'}
+              </Text>
+              <View style={styles.priceContainer}>
+                <MaterialIcons name="attach-money" size={18} color="#F9F9FF" />
+                <Text style={styles.price}>{item.price || 'Цена не указана'}</Text>
+              </View>
             </View>
-          </View>
 
-          <View style={styles.cardDetails}>
-            <View style={styles.detailItem}>
-              <MaterialIcons name="king-bed" size={20} color="#D09683" />
-              <Text style={styles.detailText}>{item.bedrooms}</Text>
+            <View style={styles.cardDetails}>
+              <View style={styles.detailItem}>
+                <MaterialIcons name="king-bed" size={20} color="#D09683" />
+                <Text style={styles.detailText}>{item.bedrooms || 0}</Text>
+              </View>
+              <View style={styles.detailItem}>
+                <MaterialIcons name="bathtub" size={20} color="#D09683" />
+                <Text style={styles.detailText}>{item.bathrooms || 0}</Text>
+              </View>
+              <View style={styles.detailItem}>
+                <MaterialIcons name="square-foot" size={20} color="#D09683" />
+                <Text style={styles.detailText}>{item.area || 0} m²</Text>
+              </View>
             </View>
-            <View style={styles.detailItem}>
-              <MaterialIcons name="bathtub" size={20} color="#D09683" />
-              <Text style={styles.detailText}>{item.bathrooms}</Text>
-            </View>
-            <View style={styles.detailItem}>
-              <MaterialIcons name="square-foot" size={20} color="#D09683" />
-              <Text style={styles.detailText}>{item.area} m²</Text>
-            </View>
-          </View>
 
-          <View style={styles.locationContainer}>
-            <MaterialIcons name="location-on" size={16} color="#D09683" />
-            <Text style={styles.location}>{item.location}</Text>
+            <View style={styles.locationContainer}>
+              <MaterialIcons name="location-on" size={16} color="#D09683" />
+              <Text style={styles.location}>
+                {[item.city, item.region].filter(Boolean).join(', ') || 'Адрес не указан'}
+              </Text>
+            </View>
           </View>
-        </View>
-      </LinearGradient>
-    </TouchableOpacity>
-  );
+        </LinearGradient>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -92,7 +139,7 @@ const PropertyListScreen = ({ navigation }) => {
         <FlatList
           data={properties}
           renderItem={renderPropertyCard}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item._id}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
         />
@@ -239,6 +286,27 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito_400Regular',
     textAlign: 'center',
     opacity: 0.8,
+  },
+  centerContent: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorText: {
+    color: '#D09683',
+    fontSize: 16,
+    fontFamily: 'Nunito_400Regular',
+    marginBottom: 16,
+  },
+  retryButton: {
+    backgroundColor: '#D09683',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
+  retryButtonText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontFamily: 'Nunito_700Bold',
   },
 });
 
