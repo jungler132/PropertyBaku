@@ -131,15 +131,91 @@ const PropertyFormScreen = ({ navigation }) => {
 
   const handleSubmit = async () => {
     if (validateForm()) {
-      const propertyData = {
-        ...property,
-        mediaFiles,
-        ownerName: property.owner,
-        ownerPhone: `${property.phoneCode}${property.phoneNumber}`,
-      };
-      
-      addProperty(propertyData);
-      navigation.navigate('Success', { property: propertyData, mediaFiles });
+      try {
+        // Подготавливаем данные в соответствии с моделью MongoDB
+        const propertyData = {
+          // Основная информация
+          type: property.type,
+          area: Number(property.area),
+          landArea: Number(property.landArea),
+          bedrooms: Number(property.bedrooms),
+          bathrooms: Number(property.bathrooms),
+          
+          // Местоположение
+          city: property.city,
+          region: property.region,
+          address: property.address,
+
+          // Дополнительные удобства
+          features: {
+            hasGarage: property.hasGarage,
+            hasParking: property.hasParking,
+            hasPool: property.hasPool,
+            hasKidsRoom: property.hasKidsRoom,
+            hasWinterGarden: property.hasWinterGarden,
+            hasBioPool: property.hasBioPool,
+            hasFootballField: property.hasFootballField,
+            hasBasketballCourt: property.hasBasketballCourt,
+            hasTennisCourt: property.hasTennisCourt,
+            hasGym: property.hasGym,
+            hasSauna: property.hasSauna,
+            hasJacuzzi: property.hasJacuzzi,
+            hasWineCellar: property.hasWineCellar
+          },
+
+          // Медиафайлы
+          mediaFiles: mediaFiles.map(file => ({
+            uri: file.uri,
+            type: file.type
+          })),
+
+          // Контактная информация
+          owner: property.owner,
+          phoneCode: property.phoneCode,
+          phoneNumber: property.phoneNumber
+        };
+
+        console.log('Отправляем данные в MongoDB:', propertyData);
+
+        // Отправляем данные на сервер
+        const response = await fetch('http://192.168.1.2:5000/api/properties', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(propertyData)
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const savedProperty = await response.json();
+        console.log('Данные успешно сохранены:', savedProperty);
+
+        // Добавляем в локальный контекст
+        addProperty(savedProperty);
+        
+        // Показываем сообщение об успехе
+        Alert.alert(
+          i18n.t('alerts.success'),
+          i18n.t('alerts.propertyCreated'),
+          [
+            { 
+              text: 'OK', 
+              onPress: () => navigation.navigate('Success', { 
+                property: savedProperty
+              })
+            }
+          ]
+        );
+      } catch (error) {
+        console.error('Ошибка при сохранении данных:', error);
+        Alert.alert(
+          i18n.t('alerts.error'),
+          i18n.t('alerts.propertyCreateError')
+        );
+      }
     }
   };
 
